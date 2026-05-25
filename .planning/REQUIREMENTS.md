@@ -97,40 +97,40 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUN-01 | Phase 1 | Pending |
-| FOUN-02 | Phase 1 | Pending |
-| FOUN-03 | Phase 1 | Pending |
-| FOUN-04 | Phase 1 | Pending |
-| FOUN-05 | Phase 1 | Pending |
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| AUTH-03 | Phase 2 | Pending |
-| HOME-01 | Phase 3 | Pending |
-| HOME-02 | Phase 3 | Pending |
-| HOME-03 | Phase 3 | Pending |
-| HOME-04 | Phase 3 | Pending |
-| HOME-05 | Phase 3 | Pending |
-| HOME-06 | Phase 3 | Pending |
-| HOME-07 | Phase 3 | Pending |
-| SHOP-01 | Phase 3 | Pending |
-| SHOP-02 | Phase 3 | Pending |
-| SHOP-03 | Phase 3 | Pending |
-| SHOP-04 | Phase 3 | Pending |
-| SHOP-05 | Phase 3 | Pending |
-| COMP-01 | Phase 3 | Pending |
-| COMP-02 | Phase 3 | Pending |
-| COMP-03 | Phase 3 | Pending |
-| COIN-01 | Phase 4 | Pending |
-| COIN-02 | Phase 4 | Pending |
-| COIN-03 | Phase 4 | Pending |
-| COIN-04 | Phase 4 | Pending |
-| PREG-01 | Phase 5 | Pending |
-| PREG-02 | Phase 5 | Pending |
-| PREG-03 | Phase 5 | Pending |
-| PREG-04 | Phase 5 | Pending |
-| PROF-01 | Phase 5 | Pending |
-| PROF-02 | Phase 5 | Pending |
-| PROF-03 | Phase 5 | Pending |
+| FOUN-01 | Phase 1 — Foundation | Pending |
+| FOUN-02 | Phase 1 — Foundation | Pending |
+| FOUN-03 | Phase 1 — Foundation | Pending |
+| FOUN-04 | Phase 1 — Foundation | Pending |
+| FOUN-05 | Phase 1 — Foundation | Pending |
+| AUTH-01 | Phase 2 — Auth + State Layer | Pending |
+| AUTH-02 | Phase 2 — Auth + State Layer | Pending |
+| AUTH-03 | Phase 2 — Auth + State Layer | Pending |
+| HOME-01 | Phase 3 — Core Shopping Loop | Pending |
+| HOME-02 | Phase 3 — Core Shopping Loop | Pending |
+| HOME-03 | Phase 3 — Core Shopping Loop | Pending |
+| HOME-04 | Phase 3 — Core Shopping Loop | Pending |
+| HOME-05 | Phase 3 — Core Shopping Loop | Pending |
+| HOME-06 | Phase 3 — Core Shopping Loop | Pending |
+| HOME-07 | Phase 3 — Core Shopping Loop | Pending |
+| SHOP-01 | Phase 3 — Core Shopping Loop | Pending |
+| SHOP-02 | Phase 3 — Core Shopping Loop | Pending |
+| SHOP-03 | Phase 3 — Core Shopping Loop | Pending |
+| SHOP-04 | Phase 3 — Core Shopping Loop | Pending |
+| SHOP-05 | Phase 3 — Core Shopping Loop | Pending |
+| COMP-01 | Phase 3 — Core Shopping Loop | Pending |
+| COMP-02 | Phase 3 — Core Shopping Loop | Pending |
+| COMP-03 | Phase 3 — Core Shopping Loop | Pending |
+| COIN-01 | Phase 4 — Smart Coins | Pending |
+| COIN-02 | Phase 4 — Smart Coins | Pending |
+| COIN-03 | Phase 4 — Smart Coins | Pending |
+| COIN-04 | Phase 4 — Smart Coins | Pending |
+| PREG-01 | Phase 5 — Price Registration + Profile | Pending |
+| PREG-02 | Phase 5 — Price Registration + Profile | Pending |
+| PREG-03 | Phase 5 — Price Registration + Profile | Pending |
+| PREG-04 | Phase 5 — Price Registration + Profile | Pending |
+| PROF-01 | Phase 5 — Price Registration + Profile | Pending |
+| PROF-02 | Phase 5 — Price Registration + Profile | Pending |
+| PROF-03 | Phase 5 — Price Registration + Profile | Pending |
 
 **Coverage:**
 - v1 requirements: 34 total
@@ -139,4 +139,4 @@
 
 ---
 *Requirements defined: 2026-05-25*
-*Last updated: 2026-05-25 after initial definition*
+*Last updated: 2026-05-25 — traceability updated with phase names after ROADMAP.md created*
