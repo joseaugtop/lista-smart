@@ -31,7 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 3. Barra de navegação inferior com 5 abas preserva o estado de scroll de cada aba ao alternar entre elas
 4. Modelos User, Vehicle, Product, CartItem e CoinTransaction serializam/desserializam corretamente via toJson/fromJson
 5. SharedPreferences é inicializado antes de runApp() e injetado via ProviderScope.overrides sem erro de runtime
-**Plans:** TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — pubspec + design system constants + theme + domain models + SharedPreferences sentinel + unit tests
+- [ ] 01-02-PLAN.md — routing layer (RouterNotifier, GoRouter, StatefulShellRoute) + main.dart bootstrap + placeholder screens + human verification
 
 ### Phase 2: Auth + State Layer
 **Goal:** Usuário pode fazer login simulado e o app redireciona corretamente; todos os providers de estado global estão ativos e testáveis
@@ -93,7 +97,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/2 | Not started | - |
 | 2. Auth + State Layer | 0/TBD | Not started | - |
 | 3. Core Shopping Loop | 0/TBD | Not started | - |
 | 4. Smart Coins | 0/TBD | Not started | - |
