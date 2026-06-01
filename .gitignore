@@ -1,0 +1,42 @@
+# Flutter generated files
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+**/android/app/google-services.json
+**/android/app/build/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/Runner/GeneratedPluginRegistrant.m
+
+# macOS
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/
+
+# Dart generated code
+*.g.dart
+*.freezed.dart
+*.gen.dart
+
+# Coverage
+coverage/
+
+# Test helpers (Windows path workaround scripts - not needed in repo)
+run_tests.ps1
+run_tests.bat
+run_analyze.ps1
+run_analyze_all.ps1
+run_all_tests.ps1
