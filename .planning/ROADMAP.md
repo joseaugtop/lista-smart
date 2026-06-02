@@ -55,7 +55,12 @@ Plans:
 3. Ao limpar o estado do usuário (simular logout), RouterNotifier redireciona automaticamente para /login sem intervenção manual
 4. UserNotifier, CartNotifier, FavoritesNotifier e CoinNotifier respondem a ações sem exceções de estado nulo
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — auth backbone: MockData + UserNotifier + fix CR-02/CR-03 no RouterNotifier/goRouterProvider + redirect ativo
+- [ ] 02-02-PLAN.md — LoginScreen glassmorphic (blobs + BackdropFilter + campos Lucide + loading 500ms) + widget test
+- [ ] 02-03-PLAN.md — state layer: CartNotifier + FavoritesNotifier + CoinNotifier com persistência + fix WR-02
 
 ### Phase 3: Core Shopping Loop
 
@@ -115,7 +120,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete    | 2026-06-02 |
-| 2. Auth + State Layer | 0/TBD | Not started | - |
+| 2. Auth + State Layer | 0/3 | Not started | - |
 | 3. Core Shopping Loop | 0/TBD | Not started | - |
 | 4. Smart Coins | 0/TBD | Not started | - |
 | 5. Price Registration + Profile | 0/TBD | Not started | - |
