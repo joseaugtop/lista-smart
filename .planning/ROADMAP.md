@@ -56,9 +56,13 @@ Plans:
 4. UserNotifier, CartNotifier, FavoritesNotifier e CoinNotifier respondem a ações sem exceções de estado nulo
 
 **Plans:** 3 plans
-
 Plans:
+**Wave 1**
+
 - [ ] 02-01-PLAN.md — auth backbone: MockData + UserNotifier + fix CR-02/CR-03 no RouterNotifier/goRouterProvider + redirect ativo
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 02-02-PLAN.md — LoginScreen glassmorphic (blobs + BackdropFilter + campos Lucide + loading 500ms) + widget test
 - [ ] 02-03-PLAN.md — state layer: CartNotifier + FavoritesNotifier + CoinNotifier com persistência + fix WR-02
 
