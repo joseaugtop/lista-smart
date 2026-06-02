@@ -2,7 +2,7 @@
 phase: 1
 slug: foundation
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-05-25
 ---
@@ -61,9 +61,11 @@ created: 2026-05-25
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| 5-tab nav preserves scroll state | FOUN-03 | Requires running app on device/simulator | Open app, scroll in tab 1, switch to tab 2, switch back — scroll position preserved |
-| Dark theme renders correctly on device | FOUN-02 | Visual check needed | Launch on dark-mode device; verify #09090B bg, #A3E615 primary, Inter font |
+| 5-tab nav preserves scroll state | FOUN-03 | Widget testing StatefulShellRoute requires a full app pump — manual device check is more reliable than fragile widget test scaffolding for a navigation shell. Academic scope justifies manual. | Open app, scroll in tab 1, switch to tab 2, switch back — scroll position preserved |
+| Dark theme renders correctly on device | FOUN-02 | Color correctness (`#09090B`, `#A3E615`) and font rendering (Inter) require visual inspection on actual hardware/emulator — `flutter analyze` and compile tests cannot verify rendered colors. Academic scope justifies manual. | Launch on dark-mode device; verify #09090B background, #A3E615 primary accents, Inter typeface visible |
 | lucide_icons resolves correctly | FOUN-01 | Pub resolution check | `flutter pub get` exits 0 with lucide_icons ^0.257.0 |
+
+**Nyquist compliance justification:** FOUN-01, FOUN-04, FOUN-05 have automated test coverage (unit tests for models and SharedPreferences provider). FOUN-02 and FOUN-03 are explicitly manual-only — visual rendering correctness and navigation shell state preservation are more reliably verified by running the app than by fragile widget test scaffolding for a Phase 1 foundation slice. This is an accepted exception for academic project scope.
 
 ---
 

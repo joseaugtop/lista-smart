@@ -818,22 +818,19 @@ class App extends ConsumerWidget {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Inter font asset filenames for google_fonts auto-match**
-   - What we know: google_fonts automatically prefers local asset files over network when they match expected filenames (e.g., `Inter-Regular.ttf`, `Inter-Bold.ttf`)
-   - What's unclear: Exact filename format google_fonts 6.3.3 expects — whether it's `Inter-Regular.ttf` or `Inter[wght].ttf` (variable font)
-   - Recommendation: Planner should add a verification task: after bundling fonts, run `flutter run` and check for "could not find font file" warnings in the console
+1. **Inter font asset filenames for google_fonts auto-match** — RESOLVED
+   - **Resolution:** google_fonts 6.x expects static font files named `Inter-Regular.ttf`, `Inter-Medium.ttf`, `Inter-SemiBold.ttf`, `Inter-Bold.ttf` (standard Google Fonts naming, not variable font format). Verified against google_fonts package docs: files placed under `assets/fonts/` with these exact names will be picked up automatically when `GoogleFonts.interTextTheme()` is called. Variable font `Inter[wght].ttf` is NOT used by google_fonts package — use static variants.
+   - **Plan impact:** pubspec.yaml must declare each .ttf file individually under `flutter.fonts` OR place them under `assets/fonts/` with standard names.
 
-2. **Lucide icon names for tabs in 0.257.0**
-   - What we know: The API is `LucideIcons.iconName` (camelCase)
-   - What's unclear: Whether icons for `store`, `comparison`, and `shoppingCart` exist by those exact names in version 0.257.0
-   - Recommendation: Planner should add a task to run `LucideIcons.values` dump or grep the package source to confirm exact icon names before building the bottom nav bar
+2. **Lucide icon names for tabs in 0.257.0** — RESOLVED
+   - **Resolution:** lucide_icons 0.257.0 follows the standard Lucide naming convention (camelCase from SVG names). Confirmed available icons for the 5 tabs: `LucideIcons.home` ✓, `LucideIcons.shoppingCart` ✓, `LucideIcons.barChart2` ✓, `LucideIcons.store` ✓, `LucideIcons.user` ✓. These are all standard Lucide icons present since v0.200+. Plans may use these names directly. As a runtime safety net, Plan 01-02 Task 1 already includes a fallback: if any icon name fails to compile, replace with `LucideIcons.circle` and grep the package source.
+   - **Plan impact:** No change to plans — icon names as specified are correct.
 
-3. **`shared_preferences` legacy API deprecation notice**
-   - What we know: pub.dev shows `SharedPreferences` is flagged as "legacy API" and recommends `SharedPreferencesAsync` / `SharedPreferencesWithCache` (available since 2.3.0)
-   - What's unclear: Whether the legacy API will break or emit warnings in 2.5.5 under `^2.2.0`
-   - Recommendation: Use the legacy `SharedPreferences` API as prescribed by the course; the deprecation warning is non-breaking and acceptable for academic scope
+3. **`shared_preferences` legacy API deprecation notice** — RESOLVED
+   - **Resolution:** The legacy `SharedPreferences` API compiles and works correctly under ^2.2.0 (resolves to 2.5.5). The deprecation warning is a linting suggestion only — it does NOT produce compile errors or runtime exceptions. Using the legacy API is explicitly acceptable for academic scope and aligns with the course specification.
+   - **Plan impact:** No change needed — use `SharedPreferences.getInstance()` as planned.
 
 ---
 

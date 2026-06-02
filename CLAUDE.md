@@ -26,7 +26,7 @@ Lista Smart é um aplicativo Flutter para Android e iOS que combina lista de com
 | flutter_riverpod | ^2.5.1 | 3.3.1 (3.x branch) | Global state management | Course-prescribed. 2.x branch latest is 2.6.1. Pinning ^2.5.1 resolves to 2.6.x — intentional. Do NOT upgrade to 3.x (breaking API). |
 | go_router | ^14.0.0 | 17.2.3 | Declarative routing with redirect support | Course-prescribed. ^14.0.0 resolves to 14.x. Latest is 17.x but 14.x is stable and fully functional for this scope. Do NOT upgrade to 15+ without migration guide review. |
 | shared_preferences | ^2.2.0 | 2.x (maintained) | Local key-value persistence | Sufficient for cart, favorites, session. No SQL needed — all data is mocked. |
-| lucide_icons | ^3.0.0 | 0.257.0 | Icon system | WARNING: version mismatch — see Version Compatibility Notes. |
+| lucide_icons | ^0.257.0 | 0.257.0 | Icon system | FIXED: course spec said ^3.0.0 but that version does not exist on pub.dev. Correct version is ^0.257.0. |
 | google_fonts | ^6.1.0 | 8.x | Typography (Inter/Poppins) | 6.x is stable. Disable runtime HTTP fetching — see integration notes. |
 | intl | ^0.19.0 | 0.19.x | Date/number formatting (BRL currency) | Pin to ^0.19.0. Flutter SDK ships its own intl; version must match. |
 ## Integration Patterns
