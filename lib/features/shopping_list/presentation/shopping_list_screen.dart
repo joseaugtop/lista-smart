@@ -7,8 +7,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/providers/cart_notifier.dart';
+import '../../../core/providers/coin_notifier.dart';
 import '../../../core/providers/fuel_toggle_notifier.dart';
-import '../../../core/providers/user_notifier.dart';
 import '../../../routing/app_routes.dart';
 
 final _brl = NumberFormat.currency(locale: 'pt_BR', symbol: r'R$', decimalDigits: 2);
@@ -54,10 +54,9 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
   }
 
   Future<void> _compareWithLoading() async {
-    final user = ref.read(userNotifierProvider);
-    final balance = user?.coinBalance ?? 0;
+    final coinBalance = ref.read(coinProvider).balance;
 
-    if (balance < _comparisonCoinCost) {
+    if (coinBalance < _comparisonCoinCost) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -70,7 +69,7 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
 
     setState(() => _loadingComparison = true);
     // Deduct coins and simulate loading
-    ref.read(userNotifierProvider.notifier).spendCoins(_comparisonCoinCost);
+    ref.read(coinProvider.notifier).spendCoins(_comparisonCoinCost, 'Comparação de supermercados');
     await Future<void>.delayed(const Duration(milliseconds: 1600));
 
     if (!mounted) return;
@@ -82,7 +81,7 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
   Widget build(BuildContext context) {
     final cart = ref.watch(cartProvider);
     final fuelToggle = ref.watch(fuelToggleProvider);
-    final user = ref.watch(userNotifierProvider);
+    final coinBalance = ref.watch(coinProvider).balance;
     final theme = Theme.of(context).textTheme;
 
     if (cart.isEmpty) {
@@ -119,7 +118,6 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
 
     final total =
         cart.fold<double>(0.0, (sum, i) => sum + i.unitPrice * i.quantity);
-    final coinBalance = user?.coinBalance ?? 0;
     final hasEnoughCoins = coinBalance >= _comparisonCoinCost;
 
     return Stack(

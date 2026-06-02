@@ -8,6 +8,20 @@ import '../persistence/shared_preferences_provider.dart';
 import '../../features/smart_coins/domain/coin_transaction.dart';
 import 'user_notifier.dart';
 
+enum CoinLevel { bronze, prata, ouro }
+
+CoinLevel coinLevelOf(int balance) {
+  if (balance >= 1500) return CoinLevel.ouro;
+  if (balance >= 500) return CoinLevel.prata;
+  return CoinLevel.bronze;
+}
+
+double coinLevelProgress(int balance) {
+  if (balance >= 1500) return 1.0;
+  if (balance >= 500) return ((balance - 500) / 1000.0).clamp(0.0, 1.0);
+  return (balance / 500.0).clamp(0.0, 1.0);
+}
+
 @immutable
 class CoinState {
   const CoinState({required this.balance, required this.transactions});
@@ -60,6 +74,22 @@ class CoinNotifier extends Notifier<CoinState> {
     );
     state = state.copyWith(
       balance: state.balance + amount,
+      transactions: [tx, ...state.transactions],
+    );
+    _persist();
+  }
+
+  void spendCoins(int amount, String description) {
+    if (amount <= 0) return;
+    if (state.balance < amount) return;
+    final tx = CoinTransaction(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      description: description,
+      amount: -amount,
+      createdAt: DateTime.now(),
+    );
+    state = state.copyWith(
+      balance: state.balance - amount,
       transactions: [tx, ...state.transactions],
     );
     _persist();

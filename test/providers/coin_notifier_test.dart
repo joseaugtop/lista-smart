@@ -105,4 +105,40 @@ void main() {
       expect(state.transactions.first.id, equals(MockData.initialTransactions.first.id));
     });
   });
+
+  group('spendCoins', () {
+    test('spendCoins() decrements balance and records negative transaction', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final container = ProviderContainer(overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ]);
+      addTearDown(container.dispose);
+
+      // seed balance via addCoins
+      container.read(coinProvider.notifier).addCoins(200, 'seed');
+      final balanceBefore = container.read(coinProvider).balance;
+
+      container.read(coinProvider.notifier).spendCoins(50, 'test spend');
+
+      final state = container.read(coinProvider);
+      expect(state.balance, equals(balanceBefore - 50));
+      expect(state.transactions.first.amount, equals(-50));
+      expect(state.transactions.first.description, equals('test spend'));
+    });
+
+    test('spendCoins() is no-op when balance insufficient', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final container = ProviderContainer(overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ]);
+      addTearDown(container.dispose);
+
+      final balanceBefore = container.read(coinProvider).balance;
+      container.read(coinProvider.notifier).spendCoins(999999, 'too much');
+
+      expect(container.read(coinProvider).balance, equals(balanceBefore));
+    });
+  });
 }
