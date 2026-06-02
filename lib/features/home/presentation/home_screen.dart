@@ -14,8 +14,8 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            title: const Text('Home'),
+          const SliverAppBar(
+            title: Text('Home'),
             backgroundColor: AppColors.background,
             pinned: true,
           ),

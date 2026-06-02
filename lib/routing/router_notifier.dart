@@ -2,28 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class RouterNotifier extends AutoDisposeAsyncNotifier<void> implements Listenable {
-  VoidCallback? _routerListener;
+import '../core/providers/user_notifier.dart';
+import 'app_routes.dart';
 
+class RouterNotifier extends AsyncNotifier<void> with ChangeNotifier {
   @override
   Future<void> build() async {
-    // Phase 1: no auth watch — redirect always returns null.
-    // Phase 2 will add: ref.watch(authNotifierProvider);
-    listenSelf((_, __) => _routerListener?.call());
+    ref.watch(userNotifierProvider);
+    listenSelf((_, __) => notifyListeners());
   }
 
-  /// Route guard — returns null unconditionally in Phase 1.
-  /// Phase 2 will activate the auth guard here.
   String? redirect(BuildContext context, GoRouterState state) {
+    final user = ref.read(userNotifierProvider);
+    final isOnLogin = state.matchedLocation == AppRoutes.login;
+
+    if (user == null) return AppRoutes.login;
+    if (isOnLogin) return AppRoutes.home;
     return null;
   }
-
-  @override
-  void addListener(VoidCallback listener) => _routerListener = listener;
-
-  @override
-  void removeListener(VoidCallback listener) => _routerListener = null;
 }
 
 final routerNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<RouterNotifier, void>(RouterNotifier.new);
+    AsyncNotifierProvider<RouterNotifier, void>(RouterNotifier.new);

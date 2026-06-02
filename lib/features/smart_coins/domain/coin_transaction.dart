@@ -22,7 +22,7 @@ class CoinTransaction {
         id: json['id'] as String,
         description: json['description'] as String,
         amount: json['amount'] as int,
-        createdAt: DateTime.parse(json['createdAt'] as String),
+        createdAt: DateTime.tryParse(json['createdAt'] as String) ?? DateTime.fromMillisecondsSinceEpoch(0),
       );
 
   Map<String, dynamic> toJson() => {

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-06-02T01:10:57.383Z"
-last_activity: 2026-06-02 -- Phase 02 planning complete
+stopped_at: Phase 2 complete — awaiting human UAT
+last_updated: "2026-06-01T00:00:00.000Z"
+last_activity: 2026-06-01 -- Phase 02 executed (all 3 plans complete)
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 5
-  completed_plans: 2
-  percent: 20
+  completed_phases: 2
+  total_plans: 8
+  completed_plans: 5
+  percent: 40
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-25)
 
 **Core value:** Ajudar usuários a fazer compras mais baratas mostrando qual supermercado tem o menor preço final, incluindo o custo de deslocamento por combustível.
-**Current focus:** Phase 01 — foundation
+**Current focus:** Phase 02 — auth-state-layer (complete)
 
 ## Current Position
 
 Phase: 2
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-06-02 -- Phase 02 planning complete
+Plan: All 3 plans complete
+Status: Awaiting human UAT (verify login flow on device/emulator)
+Last activity: 2026-06-01 -- Phase 02 executed (37/37 tests green, 0 analyze issues)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 2
+- Total plans completed: 5
 - Average duration: — min
 - Total execution time: 0 hours
 
@@ -45,10 +45,11 @@ Progress: [░░░░░░░░░░] 0%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 2 | - | - |
+| 02 | 3 | - | - |
 
 **Recent Trend:**
 
-- Last 5 plans: —
+- Last 5 plans: Phase 02 (01, 02, 03)
 - Trend: —
 
 *Updated after each plan completion*
@@ -64,10 +65,12 @@ Recent decisions affecting current work:
 - lucide_icons: ^0.257.0 — versão ^3.0.0 inexistente no pub.dev (blocker crítico prevenido)
 - Dados totalmente mockados — sem backend, sem chamadas de rede
 - Design system dark glassmórfico fixo: #09090B bg, #A3E615 primary, #18181B surface
+- Phase 02: AuthNotifier via Notifier<User?> (not StateNotifier); RouterNotifier via AsyncNotifier<void> with ChangeNotifier
+- Phase 02: widget_test.dart stale MyApp reference replaced with App smoke test
 
 ### Pending Todos
 
-None yet.
+- Human UAT: verify login screen renders on device, "Avançar" navigates to Home
 
 ### Blockers/Concerns
 
@@ -82,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-02T00:49:22.409Z
-Stopped at: Phase 2 UI-SPEC approved
-Resume file: .planning/phases/02-auth-state-layer/02-UI-SPEC.md
+Last session: 2026-06-01
+Stopped at: Phase 2 complete — human UAT pending
+Resume file: .planning/phases/02-auth-state-layer/02-UI-SPEC.md (human-check section)

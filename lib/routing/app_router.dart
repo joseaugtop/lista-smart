@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -28,12 +29,12 @@ final _tab4Key = GlobalKey<NavigatorState>(debugLabel: 'tab4');
 final goRouterProvider = Provider<GoRouter>((ref) {
   // Use .notifier to get RouterNotifier instance without subscribing to its state.
   // This avoids recreating GoRouter on every auth state change.
-  final notifier = ref.watch(routerNotifierProvider.notifier);
+  final notifier = ref.read(routerNotifierProvider.notifier);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.home,
-    debugLogDiagnostics: true,
+    initialLocation: AppRoutes.login,
+    debugLogDiagnostics: kDebugMode,
     refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [
