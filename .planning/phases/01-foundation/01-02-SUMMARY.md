@@ -48,9 +48,9 @@ decisions:
 metrics:
   duration_minutes: 5
   completed: 2026-06-01
-  tasks_completed: 2
+  tasks_completed: 3
   tasks_total: 3
-  checkpoint_pending: true
+  checkpoint_pending: false
   files_created: 12
   tests_passing: 9
   tests_total: 9
@@ -60,7 +60,7 @@ metrics:
 
 GoRouter as Riverpod Provider with StatefulShellRoute.indexedStack wired to async SharedPreferences bootstrap — walking skeleton is architecturally complete pending device verification.
 
-**Status: PARTIAL — Tasks 1 and 2 complete. Task 3 (checkpoint:human-verify) awaiting human device run.**
+**Status: COMPLETE — All 3 tasks done. Human verified on Motorola Edge 50 Fusion (Android). Fix: initialLocation changed from /login to /home (no auth guard in Phase 1).**
 
 ## What Was Built
 
@@ -94,9 +94,13 @@ GoRouter as Riverpod Provider with StatefulShellRoute.indexedStack wired to asyn
 | No `darkTheme:` / `themeMode:` in app.dart | Confirmed |
 | All 5 lucide icon names verified | home, shoppingCart, barChart2, store, user |
 
-### Task 3: PENDING — checkpoint:human-verify
+### Task 3: COMPLETE — checkpoint:human-verify approved
 
-Platform test (flutter run), scroll preservation check, and visual verification pending human execution.
+- Platform: Motorola Edge 50 Fusion (Android, physical device)
+- App launched: dark background #09090B confirmed
+- Fix applied during verification: `initialLocation` changed from `AppRoutes.login` to `AppRoutes.home` — executor had set login as initial location but Phase 1 has no auth guard, so app was stuck on LoginScreen without bottom nav
+- Fix commit: 58c576d
+- Human approved after fix
 
 ## Deviations from Plan
 
@@ -134,7 +138,7 @@ Platform test (flutter run), scroll preservation check, and visual verification 
 
 No new network endpoints, auth paths, or schema changes introduced in Plan 02. All routing is local/declarative. RouterNotifier.redirect returns null unconditionally — intentional per T-02-01 (accepted, Phase 1).
 
-## Self-Check: PASSED (partial — Task 3 pending)
+## Self-Check: PASSED
 
 | Item | Status |
 |------|--------|
