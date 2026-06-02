@@ -95,7 +95,7 @@ Tokens já implementados em `lib/core/constants/app_colors.dart`. O executor DEV
 | Secondary (30%) | `AppColors.surface` | `#18181B` | Cards de produto, cards de supermercado, bottom sheet, item da lista | Superfície dos containers de conteúdo |
 | Surface elevated | `AppColors.surfaceElevated` | `#27272A` | Controles de quantidade, campo de busca (preenchimento interno) | Elementos ligeiramente elevados sobre surface |
 | Accent (10%) | `AppColors.primary` | `#A3E615` | Reservado para elementos listados abaixo | Ver lista "Accent reserved for" |
-| Destructive | `AppColors.error` | `#EF4444` | Ícone/confirmação de remoção de item do carrinho, botão "Limpar carrinho" | Confirmação de ações irreversíveis |
+| Destructive | `AppColors.error` | `#EF4444` | Ícone/confirmação de remoção de item do carrinho, botão "Limpar Carrinho" | Confirmação de ações irreversíveis |
 | Success (suporte) | `AppColors.success` | `#22C55E` | Ícone de estrela favorito quando ativado | Estado ativo do favorito |
 
 Accent (`#A3E615`) reservado exclusivamente para:
@@ -135,6 +135,8 @@ color: AppColors.primary.withValues(alpha: 0.1)  // fundo suave
 
 ### HomeScreen
 
+Ponto focal: o grid de produtos (SliverGrid 2 colunas).
+
 | Elemento | Copy | Notas |
 |----------|------|-------|
 | Título da AppBar | `Home` | `Text('Home')` no SliverAppBar title |
@@ -147,6 +149,8 @@ color: AppColors.primary.withValues(alpha: 0.1)  // fundo suave
 
 ### ProductDetailScreen
 
+Ponto focal: a seção de preços por supermercado com destaque do menor preço.
+
 | Elemento | Copy | Notas |
 |----------|------|-------|
 | Título da AppBar | `Detalhes do Produto` | AppBar padrão com back arrow |
@@ -158,9 +162,11 @@ color: AppColors.primary.withValues(alpha: 0.1)  // fundo suave
 | Label departamento | `Departamento:` | Prefixo inline, `bodySmall`, `textSecondary` |
 | Label categoria | `Categoria:` | Prefixo inline, `bodySmall`, `textSecondary` |
 | Label subcategoria | `Subcategoria:` | Prefixo inline, `bodySmall`, `textSecondary` |
-| Estado de imagem falha | Ícone `LucideIcons.packageOpen`, cor `textSecondary`, tamanho 64px | `errorBuilder` do `Image.network` |
+| Estado de imagem falha | Ícone `LucideIcons.packageOpen`, cor `textSecondary`, tamanho 64px + `Text('Imagem indisponível', style: bodySmall, color: textSecondary)` abaixo do ícone | `errorBuilder` do `Image.network` |
 
 ### ShoppingListScreen
+
+Ponto focal: a lista de itens do carrinho com controles de quantidade.
 
 | Elemento | Copy | Notas |
 |----------|------|-------|
@@ -172,13 +178,15 @@ color: AppColors.primary.withValues(alpha: 0.1)  // fundo suave
 | CTA comparação | `Comparar Supermercados` | `FilledButton` full-width, visível apenas se `cart.isNotEmpty` |
 | Estado vazio do carrinho | `Sua lista está vazia` | `headlineSmall`, centralizado |
 | Sublabel estado vazio | `Adicione produtos na tela Home` | `bodyMedium`, `textSecondary` |
-| Confirmação limpar carrinho | Título: `Limpar carrinho?` / Corpo: `Todos os itens serão removidos.` / Botões: `Cancelar` e `Limpar` | `AlertDialog` padrão Material 3 |
+| Confirmação limpar carrinho | Título: `Limpar carrinho?` / Corpo: `Todos os itens serão removidos.` / Botões: `Manter Itens` e `Limpar Carrinho` | `AlertDialog` padrão Material 3; `Limpar Carrinho` em `AppColors.error` |
 | Botão limpar (AppBar action) | sem texto — `LucideIcons.trash2`, tooltip `Limpar carrinho` | Visível apenas se `cart.isNotEmpty` |
 | Tooltip remover item individual | `Remover item` | `IconButton` `LucideIcons.x` |
 | Ação destrutiva: remover item | sem confirmação — remoção direta com ícone X | Quantity → 0 via botão "-" remove automaticamente |
-| Ação destrutiva: limpar tudo | `AlertDialog` com confirmação | Botão "Limpar" em `AppColors.error` |
+| Ação destrutiva: limpar tudo | `AlertDialog` com confirmação | Botão `Limpar Carrinho` em `AppColors.error` |
 
 ### PriceComparisonScreen
+
+Ponto focal: o card vencedor (primeiro da lista, borda primary).
 
 | Elemento | Copy | Notas |
 |----------|------|-------|
@@ -192,6 +200,8 @@ color: AppColors.primary.withValues(alpha: 0.1)  // fundo suave
 | Estado sem combustível | linha de combustível omitida do card | quando toggle desativado |
 
 ### NutritionalInfoBottomSheet
+
+Ponto focal: a tabela de nutrientes (6 linhas).
 
 | Elemento | Copy | Notas |
 |----------|------|-------|
@@ -209,7 +219,7 @@ color: AppColors.primary.withValues(alpha: 0.1)  // fundo suave
 | Unidade fibras | `g` | Inline após valor |
 | Label sódio | `Sódio` | Linha da tabela |
 | Unidade sódio | `mg` | Inline após valor |
-| Botão fechar | `Fechar` | `TextButton` na parte inferior |
+| Botão fechar | `Fechar Tabela` | `TextButton` na parte inferior |
 
 ---
 
@@ -276,6 +286,7 @@ Estado carregando imagem:
 
 Estado imagem com erro:
   - Icon(LucideIcons.packageOpen, size: 64, color: AppColors.textSecondary)
+  - Text('Imagem indisponível', style: bodySmall, color: textSecondary) abaixo do ícone
   - Centralizado dentro do espaço de imagem
 
 Estado produto já no carrinho:
@@ -314,8 +325,8 @@ Interação +/- de quantidade:
 
 Interação limpar carrinho:
   - Toque no ícone lixeira → AlertDialog "Limpar carrinho?"
-  - Botão "Cancelar": fecha dialog, mantém carrinho
-  - Botão "Limpar": cor AppColors.error → CartNotifier.clearCart() → dialog fecha
+  - Botão "Manter Itens": fecha dialog, mantém carrinho intacto
+  - Botão "Limpar Carrinho": cor AppColors.error → CartNotifier.clearCart() → dialog fecha
 ```
 
 ### PriceComparisonScreen — Estados principais
@@ -347,7 +358,7 @@ Estado padrão:
   - DraggableScrollableSheet ou showModalBottomSheet com initialChildSize: 0.5, maxChildSize: 0.85
   - Tabela com 6 linhas de nutrientes
   - Handle visual no topo (retângulo 32×4px, cor textSecondary.withValues(0.4), radiusS)
-  - Botão "Fechar" no final do conteúdo scrollável
+  - Botão "Fechar Tabela" no final do conteúdo scrollável
 ```
 
 ---
@@ -436,7 +447,14 @@ Scaffold(
           child: Image.network(
             product.imageUrl,
             fit: BoxFit.contain,
-            errorBuilder: → Icon(LucideIcons.packageOpen, 64px, textSecondary),
+            errorBuilder: → Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(LucideIcons.packageOpen, size: 64, color: AppColors.textSecondary),
+                SizedBox(height: spacingXS),
+                Text('Imagem indisponível', style: bodySmall, color: textSecondary),
+              ],
+            ),
           ),
         ),
         Padding(
@@ -665,7 +683,7 @@ showModalBottomSheet(
                 _NutriRow('Sódio', info.sodium, 'mg'),
                 SizedBox(height: spacingM),
                 TextButton(
-                  label: 'Fechar',
+                  label: 'Fechar Tabela',
                   onPressed: → Navigator.pop(context),
                 ),
               ],
@@ -692,8 +710,9 @@ showModalBottomSheet(
 | Switch de combustível | `Switch` com `label` visual associado — Row com texto ao lado |
 | Card vencedor da comparação | `Semantics(label: 'Melhor opção: {supermercado}, total R$ X,XX')` |
 | Contraste de texto | textMain (#FAFAFA) sobre background (#09090B): ratio ≥ 15:1. Texto escuro (#09090B) sobre primary (#A3E615): ratio ≥ 7:1 |
-| Ícone de imagem falha | `Semantics(label: 'Imagem indisponível')` no errorBuilder |
+| Ícone de imagem falha | `Semantics(label: 'Imagem indisponível')` no errorBuilder (wrapping o Column com ícone + texto) |
 | Bottom sheet nutricional | `DraggableScrollableSheet` com handle visual — acessível via swipe gesture |
+| Botão limpar carrinho (AppBar) | `Semantics(label: 'Limpar carrinho')` em `IconButton` com `LucideIcons.trash2` |
 
 ---
 
@@ -748,7 +767,7 @@ Esta fase usa Flutter com Material 3. Não há shadcn, npm registries ou third-p
 | Tap card → ProductDetailScreen | CONTEXT.md D-08 | rota `/home/product/:productId` |
 | Preços por supermercado com destaque | CONTEXT.md D-09 | menor preço com fundo primary 0.1 + texto primary |
 | Product model: ean/subcategory/department/nutritionalInfo | CONTEXT.md D-10 | Novos campos no model existente |
-| Image.network com errorBuilder | CONTEXT.md D-11 | `LucideIcons.packageOpen` fallback |
+| Image.network com errorBuilder | CONTEXT.md D-11 | `LucideIcons.packageOpen` fallback + texto "Imagem indisponível" |
 | Busca sempre visível | CONTEXT.md D-12 | SliverPersistentHeader pinned |
 | SliverAppBar: badge (leading) + grid/list (actions) | CONTEXT.md D-13 | Badge 36×36px circular, primary |
 | FAB: LucideIcons.scanLine → Scanner tab | CONTEXT.md D-14 | Índice 2 da bottom nav |
@@ -768,4 +787,5 @@ Esta fase usa Flutter com Material 3. Não há shadcn, npm registries ou third-p
 
 *Fase: 3 — Core Shopping Loop*
 *UI-SPEC gerado: 2026-06-01*
+*UI-SPEC revisado: 2026-06-01 (checker revision — copywriting fixes)*
 *Gerado por: gsd-ui-researcher*
