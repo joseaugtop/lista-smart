@@ -7,11 +7,11 @@
 
 ### Foundation
 
-- [ ] **FOUN-01**: App Flutter compila e roda no Android e iOS sem erros (pubspec correto com lucide_icons: ^0.257.0)
-- [ ] **FOUN-02**: Design system dark glassmórfico implementado: cores (#09090B background, #A3E615 primary, #18181B surface), typography google_fonts Inter, tema escuro sem clash de ColorScheme
-- [ ] **FOUN-03**: Navegação com 5 abas via StatefulShellRoute.indexedStack preserva estado de scroll entre trocas de aba
-- [ ] **FOUN-04**: Modelos de dados tipados implementados: User, Vehicle, Product, CartItem, CoinTransaction com toJson/fromJson
-- [ ] **FOUN-05**: Persistência local via shared_preferences inicializada antes de runApp() e injetada via ProviderScope.overrides
+- [x] **FOUN-01**: App Flutter compila e roda no Android e iOS sem erros (pubspec correto com lucide_icons: ^0.257.0)
+- [x] **FOUN-02**: Design system dark glassmórfico implementado: cores (#09090B background, #A3E615 primary, #18181B surface), typography google_fonts Inter, tema escuro sem clash de ColorScheme
+- [x] **FOUN-03**: Navegação com 5 abas via StatefulShellRoute.indexedStack preserva estado de scroll entre trocas de aba
+- [x] **FOUN-04**: Modelos de dados tipados implementados: User, Vehicle, Product, CartItem, CoinTransaction com toJson/fromJson
+- [x] **FOUN-05**: Persistência local via shared_preferences inicializada antes de runApp() e injetada via ProviderScope.overrides
 
 ### Authentication
 
@@ -97,11 +97,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUN-01 | Phase 1 — Foundation | Pending |
-| FOUN-02 | Phase 1 — Foundation | Pending |
-| FOUN-03 | Phase 1 — Foundation | Pending |
-| FOUN-04 | Phase 1 — Foundation | Pending |
-| FOUN-05 | Phase 1 — Foundation | Pending |
+| FOUN-01 | Phase 1 — Foundation | Complete |
+| FOUN-02 | Phase 1 — Foundation | Complete |
+| FOUN-03 | Phase 1 — Foundation | Complete |
+| FOUN-04 | Phase 1 — Foundation | Complete |
+| FOUN-05 | Phase 1 — Foundation | Complete |
 | AUTH-01 | Phase 2 — Auth + State Layer | Pending |
 | AUTH-02 | Phase 2 — Auth + State Layer | Pending |
 | AUTH-03 | Phase 2 — Auth + State Layer | Pending |
@@ -133,6 +133,7 @@
 | PROF-03 | Phase 5 — Price Registration + Profile | Pending |
 
 **Coverage:**
+
 - v1 requirements: 34 total
 - Mapped to phases: 34
 - Unmapped: 0 ✓
