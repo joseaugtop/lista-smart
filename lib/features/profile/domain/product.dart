@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
 
+import 'nutritional_info.dart';
+
 @immutable
 class Product {
   const Product({
@@ -10,6 +12,10 @@ class Product {
     required this.imageUrl,
     required this.averagePrice,
     required this.tags,
+    this.ean = '',
+    this.subcategory = '',
+    this.department = '',
+    this.nutritionalInfo,
   });
 
   final String id;
@@ -19,6 +25,10 @@ class Product {
   final String imageUrl;
   final double averagePrice;
   final List<String> tags;
+  final String ean;
+  final String subcategory;
+  final String department;
+  final NutritionalInfo? nutritionalInfo;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json['id'] as String,
@@ -28,6 +38,13 @@ class Product {
         imageUrl: json['imageUrl'] as String,
         averagePrice: (json['averagePrice'] as num).toDouble(),
         tags: (json['tags'] as List<dynamic>).cast<String>(),
+        ean: json['ean'] as String? ?? '',
+        subcategory: json['subcategory'] as String? ?? '',
+        department: json['department'] as String? ?? '',
+        nutritionalInfo: json['nutritionalInfo'] != null
+            ? NutritionalInfo.fromJson(
+                json['nutritionalInfo'] as Map<String, dynamic>)
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +55,10 @@ class Product {
         'imageUrl': imageUrl,
         'averagePrice': averagePrice,
         'tags': List<String>.from(tags),
+        'ean': ean,
+        'subcategory': subcategory,
+        'department': department,
+        if (nutritionalInfo != null) 'nutritionalInfo': nutritionalInfo!.toJson(),
       };
 
   Product copyWith({
@@ -48,6 +69,10 @@ class Product {
     String? imageUrl,
     double? averagePrice,
     List<String>? tags,
+    String? ean,
+    String? subcategory,
+    String? department,
+    NutritionalInfo? nutritionalInfo,
   }) =>
       Product(
         id: id ?? this.id,
@@ -57,5 +82,9 @@ class Product {
         imageUrl: imageUrl ?? this.imageUrl,
         averagePrice: averagePrice ?? this.averagePrice,
         tags: tags ?? this.tags,
+        ean: ean ?? this.ean,
+        subcategory: subcategory ?? this.subcategory,
+        department: department ?? this.department,
+        nutritionalInfo: nutritionalInfo ?? this.nutritionalInfo,
       );
 }

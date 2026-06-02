@@ -32,6 +32,14 @@ class UserNotifier extends Notifier<User?> {
     ref.read(sharedPreferencesProvider).remove(_key);
   }
 
+  void spendCoins(int amount) {
+    final current = state;
+    if (current == null) return;
+    final updated = current.copyWith(coinBalance: current.coinBalance - amount);
+    state = updated;
+    _persist(updated);
+  }
+
   void _persist(User user) {
     ref.read(sharedPreferencesProvider).setString(_key, jsonEncode(user.toJson()));
   }

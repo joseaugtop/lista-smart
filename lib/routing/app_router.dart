@@ -7,8 +7,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../core/constants/app_colors.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/home/presentation/product_detail_screen.dart';
 import '../features/price_comparison/presentation/price_comparison_screen.dart';
-// price_registration is a modal/flow, not a bottom nav branch — imported in Phase 2
+import '../features/price_registration/presentation/scanner_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/shopping_list/presentation/shopping_list_screen.dart';
 import '../features/smart_coins/presentation/store_screen.dart';
@@ -54,6 +55,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.home,
                 builder: (_, __) => const HomeScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'product/:productId',
+                    builder: (_, state) => ProductDetailScreen(
+                      productId: state.pathParameters['productId']!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -63,6 +72,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.shoppingList,
                 builder: (_, __) => const ShoppingListScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'comparison',
+                    builder: (_, __) => const PriceComparisonScreen(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -70,8 +85,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             navigatorKey: _tab2Key,
             routes: [
               GoRoute(
-                path: AppRoutes.comparison,
-                builder: (_, __) => const PriceComparisonScreen(),
+                path: AppRoutes.scanner,
+                builder: (_, __) => const ScannerScreen(),
               ),
             ],
           ),
@@ -131,8 +146,8 @@ class ScaffoldWithBottomNav extends StatelessWidget {
             label: 'Lista',
           ),
           NavigationDestination(
-            icon: Icon(LucideIcons.barChart2),
-            label: 'Comparar',
+            icon: Icon(LucideIcons.scanLine),
+            label: 'Scanner',
           ),
           NavigationDestination(
             icon: Icon(LucideIcons.store),

@@ -45,6 +45,32 @@ class CartNotifier extends Notifier<List<CartItem>> {
     _persist();
   }
 
+  void incrementQuantity(String productId) {
+    final idx = state.indexWhere((item) => item.productId == productId);
+    if (idx < 0) return;
+    state = [
+      ...state.sublist(0, idx),
+      state[idx].copyWith(quantity: state[idx].quantity + 1),
+      ...state.sublist(idx + 1),
+    ];
+    _persist();
+  }
+
+  void decrementQuantity(String productId) {
+    final idx = state.indexWhere((item) => item.productId == productId);
+    if (idx < 0) return;
+    if (state[idx].quantity <= 1) {
+      removeItem(productId);
+      return;
+    }
+    state = [
+      ...state.sublist(0, idx),
+      state[idx].copyWith(quantity: state[idx].quantity - 1),
+      ...state.sublist(idx + 1),
+    ];
+    _persist();
+  }
+
   void _persist() {
     ref.read(sharedPreferencesProvider)
         .setString(_key, jsonEncode(state.map((e) => e.toJson()).toList()));
