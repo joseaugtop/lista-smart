@@ -13,7 +13,7 @@ Lista Smart é construído em cinco fases que entregam incrementalmente o valor 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Scaffolding Flutter, design system dark glassmórfico, navegação 5 abas, modelos de dados e persistência local
+- [x] **Phase 1: Foundation** - Scaffolding Flutter, design system dark glassmórfico, navegação 5 abas, modelos de dados e persistência local (completed 2026-06-02)
 - [ ] **Phase 2: Auth + State Layer** - Tela de login simulada, RouterNotifier, todos os Notifiers Riverpod e repositórios mockados
 - [ ] **Phase 3: Core Shopping Loop** - Home dashboard, lista de compras e comparação de preços — a jornada principal do usuário ponta a ponta
 - [ ] **Phase 4: Smart Coins** - Loja de moedas, barra de nível animada e histórico de transações
@@ -35,12 +35,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 4. Modelos User, Vehicle, Product, CartItem e CoinTransaction serializam/desserializam corretamente via toJson/fromJson
 5. SharedPreferences é inicializado antes de runApp() e injetado via ProviderScope.overrides sem erro de runtime
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 
 - [x] 01-01-PLAN.md — pubspec + design system constants + theme + domain models + SharedPreferences sentinel + unit tests
-- [ ] 01-02-PLAN.md — routing layer (RouterNotifier, GoRouter, StatefulShellRoute) + main.dart bootstrap + placeholder screens + human verification
+- [x] 01-02-PLAN.md — routing layer (RouterNotifier, GoRouter, StatefulShellRoute) + main.dart bootstrap + placeholder screens + human verification
 
 ### Phase 2: Auth + State Layer
 
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/2 | In Progress|  |
+| 1. Foundation | 2/2 | Complete   | 2026-06-02 |
 | 2. Auth + State Layer | 0/TBD | Not started | - |
 | 3. Core Shopping Loop | 0/TBD | Not started | - |
 | 4. Smart Coins | 0/TBD | Not started | - |
