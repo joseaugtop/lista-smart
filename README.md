@@ -17,7 +17,7 @@ Todos os dados são locais/mockados — sem backend, sem rede.
 
 | Pacote | Versão | Uso |
 |--------|--------|-----|
-| Flutter | 3.x | Framework |
+| Flutter | 3.41.9 | Framework |
 | flutter_riverpod | ^2.5.1 | Gerenciamento de estado |
 | go_router | ^14.0.0 | Navegação declarativa |
 | shared_preferences | ^2.2.0 | Persistência local |
@@ -49,7 +49,7 @@ lib/
 
 ### Pré-requisitos
 
-- Flutter 3.x instalado em path **sem espaços** (ex: `C:\flutter`)
+- Flutter **3.41.9** instalado em path **sem espaços** (ex: `C:\flutter`)
 - Android Studio com Android SDK instalado
 - Dispositivo Android com depuração USB ativada **ou** emulador configurado
 
@@ -65,12 +65,17 @@ $env:PATH = "C:\flutter\bin;" + $env:PATH
 # 2. Entra no projeto
 cd "caminho\para\lista_smart"
 
-# 3. Baixa dependências
+# 3. Gera as pastas de plataforma (necessário ao clonar — android/ e ios/ não estão no repositório)
+flutter create --platforms android,ios .
+
+# 4. Baixa dependências
 flutter pub get
 
-# 4. Roda no dispositivo conectado
+# 5. Roda no dispositivo conectado
 flutter run
 ```
+
+> **Nota:** o passo 3 é necessário apenas na primeira vez após clonar. Ele gera as pastas `android/` e `ios/` sem sobrescrever o código existente em `lib/`.
 
 ### Depuração USB (Android)
 

@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 2 complete — awaiting human UAT
+stopped_at: Phase 2 verified — ready for Phase 3
 last_updated: "2026-06-01T00:00:00.000Z"
 last_activity: 2026-06-01 -- Phase 02 executed (all 3 plans complete)
 progress:
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-05-25)
 
 Phase: 2
 Plan: All 3 plans complete
-Status: Awaiting human UAT (verify login flow on device/emulator)
-Last activity: 2026-06-01 -- Phase 02 executed (37/37 tests green, 0 analyze issues)
+Status: Complete — human UAT passed
+Last activity: 2026-06-01 -- Phase 02 UAT approved; ref.listen fix for RouterNotifier redirect
 
 Progress: [████░░░░░░] 40%
 
@@ -70,7 +70,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Human UAT: verify login screen renders on device, "Avançar" navigates to Home
+None.
 
 ### Blockers/Concerns
 
