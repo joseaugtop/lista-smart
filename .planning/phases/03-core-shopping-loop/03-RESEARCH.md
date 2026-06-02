@@ -879,21 +879,16 @@ String _getInitials(String fullName) {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`PriceComparisonScreen` ainda existe como tab2?**
-   - O que sabemos: D-04 diz que tab3 passa a ser Scanner (era Comparar). O router atual tem 5 tabs: Home, Lista, Comparar, Loja, Perfil.
-   - O que precisa ser decidido: Comparar (tab2) vira Scanner placeholder. A rota `/comparison` existente no tab2 precisa ser substituída. O `PriceComparisonScreen` vai para subrota `/shopping-list/comparison`.
-   - Recomendação: Manter `PriceComparisonScreen` como classe, mover para subrota. Criar `ScannerScreen` placeholder simples (ou reutilizar o `price_registration_screen.dart` existente como placeholder).
+   RESOLVED: Tab2 renomeado para Scanner (placeholder). `PriceComparisonScreen` movida para subrota `/shopping-list/comparison` (Plan 02 Task 1). `ScannerScreen` placeholder criada em Plan 02 Task 1.
 
 2. **`imageUrl` nos produtos mock — usar URLs reais?**
-   - O que sabemos: D-11 permite URLs do Open Food Facts para fins acadêmicos. MockData.products atual tem `imageUrl: ''` em todos os 12 produtos.
-   - O que está claro: O `errorBuilder` funciona com URL vazia — o app compila e exibe o fallback.
-   - Recomendação: Popuar com URLs reais do Open Food Facts ou placeholder de imagens públicas para demonstração acadêmica. Se não houver tempo, manter `''` — o errorBuilder garante degradação graciosa.
+   RESOLVED: Manter `imageUrl: ''` em todos os 12 produtos de MockData. O `errorBuilder` com `LucideIcons.packageOpen` garante degradação graciosa. Adequado para demonstração acadêmica (Plan 01 Task 1).
 
 3. **`CartItem.unitPrice` — usar `averagePrice` ou preço específico de supermercado?**
-   - O que sabemos: `CartItem` tem `unitPrice`. Quando o usuário adiciona um produto da `HomeScreen` (que exibe `averagePrice`), qual preço usar?
-   - Recomendação: Usar `product.averagePrice` como `unitPrice` no `CartItem`. O `comparisonResultsProvider` usa `MockData.prices[productId][supermarket]` para calcular o custo real por supermercado — o `unitPrice` no `CartItem` serve apenas para o "Total estimado" na `ShoppingListScreen` (valor aproximado, não de comparação).
+   RESOLVED: Usar `product.averagePrice` como `unitPrice` no `CartItem`. O `comparisonResultsProvider` usa `MockData.prices[productId][supermarket]` para o cálculo real por supermercado — `unitPrice` serve apenas para "Total estimado" na `ShoppingListScreen` (Plan 02 Task 3).
 
 ---
 

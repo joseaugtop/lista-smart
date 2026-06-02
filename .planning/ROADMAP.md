@@ -85,15 +85,18 @@ Plans:
 **Wave 1**
 
 - [ ] 03-01-PLAN.md — models/MockData/providers backbone (Product, NutritionalInfo, prices, fuelPrice, vehicle, 8 providers) + provider tests
-- [ ] 03-02-PLAN.md — HomeScreen redesign + ProductDetailScreen + cards + bottom sheet + router subroutes + tab rename Scanner
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 03-03-PLAN.md — ShoppingListScreen completa (cart CRUD inline, footer Switch+Total+Comparar, AlertDialog limpar) + widget test
+- [ ] 03-02-PLAN.md — HomeScreen redesign + ProductDetailScreen + cards + bottom sheet + router subroutes + tab rename Scanner
 
 **Wave 3** *(blocked on Wave 2)*
 
-- [ ] 03-04-PLAN.md — PriceComparisonScreen (cards ordenados, vencedor destacado, breakdown produtos/combustível/total) + 4 stubs de teste Wave 0
+- [ ] 03-03-PLAN.md — ShoppingListScreen completa (cart CRUD inline, footer Switch+Total+Comparar, AlertDialog limpar) + widget test
+
+**Wave 4** *(blocked on Wave 3)*
+
+- [ ] 03-04-PLAN.md — PriceComparisonScreen (cards ordenados, vencedor destacado, breakdown produtos/combustível/total) + home_screen_test Wave 0
 **UI hint**: yes
 
 ### Phase 4: Smart Coins
