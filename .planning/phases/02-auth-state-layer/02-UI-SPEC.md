@@ -57,11 +57,12 @@ Fonte única: Inter (herdada do `appTextTheme` via `GoogleFonts.interTextTheme`)
 | Role | Estilo Material 3 | Tamanho aprox. | Weight | Line Height | Uso nesta fase |
 |------|-------------------|---------------|--------|-------------|----------------|
 | Display | `displaySmall` | 36sp | 400 (regular) | 1.2 | "Lista Smart" — nome do app no topo da tela |
-| Body label | `titleMedium` | 16sp | 500 (medium) | 1.5 | Subtítulo "Faça compras mais inteligentes" |
+| Body label | `titleMedium` | 16sp | 400 (regular) | 1.5 | Subtítulo "Faça compras mais inteligentes" |
 | Input text | `bodyMedium` | 14sp | 400 (regular) | 1.5 | Texto digitado nos campos email/senha |
 | Button | `labelLarge` | 14sp | 600 (semibold) | 1.0 | Rótulo do botão "Avançar" |
 
 Regra: máximo 4 variantes tipográficas por tela. Esta tela usa exatamente 4 acima.
+Pesos declarados: 2 — 400 (regular) e 600 (semibold). Hierarquia entre `displaySmall` e `titleMedium` é estabelecida pelo tamanho (36sp vs 16sp), não por peso distinto.
 
 Cor de texto:
 - Texto principal (nome do app, rótulos de campo): `AppColors.textMain` (`#FAFAFA`)
@@ -301,10 +302,12 @@ Esta fase usa Flutter com Material 3. Não há shadcn, npm registries ou third-p
 | Persistência de CartNotifier e FavoritesNotifier | CONTEXT.md D-15 | SharedPreferences sobrevive ao restart |
 | CTA "Avançar" | CONTEXT.md D-04 | FilledButton full-width |
 | Sem validação / sem estado de erro | CONTEXT.md D-05 | auth 100% simulado |
+| titleMedium weight 500 → 400 | UI checker block D4 | hierarquia por tamanho (36sp vs 16sp), não por peso |
 
 **Decisões pré-populadas de upstream:** 20
 **Decisões requerendo input do usuário:** 0
 **Defaults aplicados:** 0
+**Revisões pós-checker:** 1 (typography weight collapse — 2026-06-01)
 
 ---
 
