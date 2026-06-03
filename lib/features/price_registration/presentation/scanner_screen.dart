@@ -61,6 +61,10 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+    // Play confetti after page transition completes so it fires when visible.
+    Future<void>.delayed(const Duration(milliseconds: 350), () {
+      if (mounted) _confettiController.play();
+    });
   }
 
   void _returnHome() {
@@ -428,15 +432,8 @@ class _Step3Widget extends StatefulWidget {
 }
 
 class _Step3WidgetState extends State<_Step3Widget> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) widget.controller.play();
-    });
-  }
-
   // NOTE: do NOT dispose the controller here — it's owned by _ScannerScreenState
+  // NOTE: play() is called from _ScannerScreenState._confirmReceipt() after page transition
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
