@@ -40,6 +40,26 @@ class UserNotifier extends Notifier<User?> {
     _persist(updated);
   }
 
+  void updateProfile({
+    required String name,
+    required String email,
+    required String address,
+    required String vehicleModel,
+    required double fuelEfficiency,
+  }) {
+    final current = state;
+    if (current == null) return;
+    final updated = current.copyWith(
+      name: name,
+      email: email,
+      address: address,
+      vehicleModel: vehicleModel,
+      fuelEfficiency: fuelEfficiency,
+    );
+    state = updated;
+    _persist(updated);
+  }
+
   void _persist(User user) {
     ref.read(sharedPreferencesProvider).setString(_key, jsonEncode(user.toJson()));
   }

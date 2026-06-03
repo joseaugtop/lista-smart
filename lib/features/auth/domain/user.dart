@@ -8,6 +8,8 @@ class User {
     required this.email,
     this.address = '',
     this.coinBalance = 0,
+    this.vehicleModel = '',
+    this.fuelEfficiency = 0.0,
   });
 
   final String id;
@@ -15,6 +17,8 @@ class User {
   final String email;
   final String address;
   final int coinBalance;
+  final String vehicleModel;
+  final double fuelEfficiency;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json['id'] as String,
@@ -22,6 +26,8 @@ class User {
         email: json['email'] as String,
         address: json['address'] as String? ?? '',
         coinBalance: json['coinBalance'] as int? ?? 0,
+        vehicleModel: json['vehicleModel'] as String? ?? '',
+        fuelEfficiency: (json['fuelEfficiency'] as num?)?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +36,8 @@ class User {
         'email': email,
         'address': address,
         'coinBalance': coinBalance,
+        'vehicleModel': vehicleModel,
+        'fuelEfficiency': fuelEfficiency,
       };
 
   User copyWith({
@@ -38,6 +46,8 @@ class User {
     String? email,
     String? address,
     int? coinBalance,
+    String? vehicleModel,
+    double? fuelEfficiency,
   }) =>
       User(
         id: id ?? this.id,
@@ -45,5 +55,7 @@ class User {
         email: email ?? this.email,
         address: address ?? this.address,
         coinBalance: coinBalance ?? this.coinBalance,
+        vehicleModel: vehicleModel ?? this.vehicleModel,
+        fuelEfficiency: fuelEfficiency ?? this.fuelEfficiency,
       );
 }

@@ -11,6 +11,8 @@ abstract class MockData {
     email: 'jose.rocha@zorte.com.br',
     address: 'Criciúma, SC',
     coinBalance: 750,
+    vehicleModel: 'Fiat Uno',
+    fuelEfficiency: 12.0,
   );
 
   static const List<Product> products = [
