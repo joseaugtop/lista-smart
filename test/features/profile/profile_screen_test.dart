@@ -60,7 +60,6 @@ void main() {
       expect(find.text('E-mail'), findsOneWidget);
       expect(find.text('Endereço'), findsOneWidget);
     },
-    skip: true,
   );
 
   testWidgets(
@@ -87,6 +86,5 @@ void main() {
       expect(find.text('47'), findsOneWidget);
       expect(find.textContaining('342'), findsOneWidget);
     },
-    skip: true,
   );
 }
