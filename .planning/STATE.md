@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Phase 05 Plan 01 complete
-last_updated: "2026-06-03T01:00:36Z"
-last_activity: 2026-06-03 -- Phase 05 Plan 01 executed — ScannerScreen wizard
+status: complete
+stopped_at: Phase 05 Plan 02 complete — all plans done
+last_updated: "2026-06-03T02:00:00Z"
+last_activity: 2026-06-03 -- Phase 05 Plan 02 executed — ProfileScreen + User model extension
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 13
-  completed_plans: 12
-  percent: 85
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-05-25)
 
 ## Current Position
 
-Phase: 05 (Price Registration + Profile) — EXECUTING
-Plan: 2 of 2
-Status: Executing Phase 05 — Plan 01 complete
-Last activity: 2026-06-03 -- ScannerScreen 3-step wizard, PREG-01..04, confetti, AppStrings
+Phase: 05 (Price Registration + Profile) — COMPLETE
+Plan: 2 of 2 (all done)
+Status: All phases complete
+Last activity: 2026-06-03 -- ProfileScreen full implementation, User model vehicle fields, updateProfile, PROF-01..03
 
-Progress: [████████░░] 85%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -79,6 +79,10 @@ Recent decisions affecting current work:
 - Phase 05-01: confetti ^0.7.0 added; AppStrings.scanReceiptDescription = 'Cadastro de nota fiscal'
 - Phase 05-01: ScannerScreen ConsumerStatefulWidget PageView wizard replaces placeholder
 - Phase 05-01: _returnHome() = jumpToPage(0) only (A4 mitigation); addPostFrameCallback for play() (A3)
+- Phase 05-02: User model extended with vehicleModel + fuelEfficiency (migration-safe fromJson using as num?)
+- Phase 05-02: UserNotifier.updateProfile persists 5 fields atomically via copyWith+_persist
+- Phase 05-02: ProfileScreen ConsumerStatefulWidget: avatar header, Dados Pessoais, Veiculo, Impacto Social sections
+- Phase 05-02: scannedCount derived from coinProvider.transactions filter on AppStrings.scanReceiptDescription
 
 ### Pending Todos
 
@@ -97,6 +101,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-06-03T01:00:36Z
-Stopped at: Completed Phase 05 Plan 01 — ScannerScreen wizard, all PREG tests green
-Resume file: .planning/phases/05-price-registration-profile/05-02-PLAN.md
+Last session: 2026-06-03T02:00:00Z
+Stopped at: Completed Phase 05 Plan 02 — ProfileScreen + User vehicle fields, all tests green (102 passing)
+Resume file: None — all plans complete
