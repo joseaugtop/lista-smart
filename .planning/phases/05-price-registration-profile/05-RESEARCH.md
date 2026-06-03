@@ -799,17 +799,19 @@ The D-05 decision says "Voltar para Home stays on Scanner tab" — since the use
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`context.go('/scanner')` no-op concern (A4)**
    - What we know: go_router 14.x `context.go()` to the current branch root may or may not trigger a widget rebuild
    - What's unclear: Whether it refreshes the branch or is a silent no-op
    - Recommendation: Implement `_returnHome()` as `_pageController.jumpToPage(0)` only, with no go() call. Simpler, safer, achieves D-05 intent. If the planner disagrees, add `context.go(AppRoutes.scanner)` — worst case is a redundant navigation that still works.
+   - **RESOLVED:** Plans implement `_returnHome()` as `_pageController.jumpToPage(0)` only (stays on Scanner tab, satisfies D-05 strict reading). "Voltar para início" TextButton uses `context.go(AppRoutes.home)` per CONTEXT.md specifics section two-button design. A4 mitigation fully adopted.
 
 2. **confetti 0.7.0 exact API for `stop()`**
    - What we know: 0.7.0 exists; 0.8.0 adds `clearAllParticles` param to stop()
    - What's unclear: Whether 0.7.0 stop() exists at all or if the controller simply times out
    - Recommendation: Rely on `duration: Duration(seconds: 3)` auto-stop only; don't call stop() manually. This is safe regardless of version.
+   - **RESOLVED:** Plans do not call `stop()` anywhere. ConfettiController auto-stops via `duration: Duration(seconds: 3)`. Only `play()` is called (via `addPostFrameCallback`).
 
 ---
 
