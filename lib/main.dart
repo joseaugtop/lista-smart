@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +15,8 @@ void main() async {
   // Bundled Inter .ttf assets are used instead of CDN download.
   GoogleFonts.config.allowRuntimeFetching = false;
 
-  // Set default locale for intl formatters (BRL currency, pt_BR dates).
+  // Initialize pt_BR locale data before any DateFormat/NumberFormat usage.
+  await initializeDateFormatting('pt_BR', null);
   Intl.defaultLocale = 'pt_BR';
 
   // Await SharedPreferences before runApp so all providers receive it synchronously.
