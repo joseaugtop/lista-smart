@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lista_smart/core/constants/app_strings.dart';
 import 'package:lista_smart/core/data/mock_data.dart';
 import 'package:lista_smart/core/persistence/shared_preferences_provider.dart';
 import 'package:lista_smart/core/providers/coin_notifier.dart';
@@ -49,6 +50,31 @@ void main() {
       expect(state.balance, equals(750));
       expect(state.transactions.length, equals(MockData.initialTransactions.length));
       expect(state.transactions.first.id, equals(MockData.initialTransactions.first.id));
+    });
+
+    // PREG-04: scan receipt description matches AppStrings constant
+    test('addCoins records transaction with scan description (PREG-04)', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
+      addTearDown(container.dispose);
+
+      container.read(userNotifierProvider.notifier).login();
+      final balanceBefore = container.read(coinProvider).balance;
+
+      container
+          .read(coinProvider.notifier)
+          .addCoins(10, AppStrings.scanReceiptDescription);
+
+      final state = container.read(coinProvider);
+      expect(state.balance, equals(balanceBefore + 10));
+      expect(state.transactions.first.amount, equals(10));
+      expect(
+        state.transactions.first.description,
+        equals(AppStrings.scanReceiptDescription),
+      );
     });
 
     test('addCoins() increments balance and inserts tx at start', () async {
