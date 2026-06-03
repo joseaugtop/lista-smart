@@ -51,7 +51,6 @@ void main() {
   // PREG-01: Step 1 renders QR Code and Camera method cards
   testWidgets(
     'PREG-01: Step 1 renders QR Code and Camera method cards',
-    skip: true,
     (tester) async {
       final container = await _makeContainer();
       await _pumpScreen(tester, container);
@@ -64,7 +63,6 @@ void main() {
   // PREG-02: Step 2 shows receipt fields and confirm button
   testWidgets(
     'PREG-02: Step 2 shows receipt fields and confirm button',
-    skip: true,
     (tester) async {
       final container = await _makeContainer();
       await _pumpScreen(tester, container);
@@ -83,7 +81,6 @@ void main() {
   // PREG-03: Step 3 shows ConfettiWidget and +10 Smart Coins
   testWidgets(
     'PREG-03: Step 3 shows ConfettiWidget and +10 Smart Coins',
-    skip: true,
     (tester) async {
       final container = await _makeContainer();
       await _pumpScreen(tester, container);

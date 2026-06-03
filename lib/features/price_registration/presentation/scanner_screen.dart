@@ -381,7 +381,8 @@ class _ReceiptCard extends StatelessWidget {
                 ),
               ),
               Text(
-                _brl.format(87.43),
+                // Non-breaking space normalized: formatter may use
+                _brl.format(87.43).replaceAll(' ', ' '),
                 style: theme.titleMedium?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
