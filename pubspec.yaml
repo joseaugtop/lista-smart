@@ -15,6 +15,7 @@ dependencies:
   lucide_icons: ^0.257.0        # COURSE SPEC SAYS ^3.0.0 — DOES NOT EXIST ON PUB.DEV
   google_fonts: ^6.1.0
   intl: ^0.19.0
+  confetti: ^0.7.0
 
 dev_dependencies:
   flutter_test:
