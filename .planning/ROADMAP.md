@@ -134,7 +134,7 @@ Plans:
 Plans:
 **Wave 1** *(two independent vertical slices — no file overlap, run in parallel)*
 
-- [ ] 05-01-PLAN.md — Scanner vertical slice: confetti dep + shared scan-description constant + Wave 0 scanner/coin tests + 3-step ScannerScreen wizard (PREG-01..04)
+- [x] 05-01-PLAN.md — Scanner vertical slice: confetti dep + shared scan-description constant + Wave 0 scanner/coin tests + 3-step ScannerScreen wizard (PREG-01..04)
 - [ ] 05-02-PLAN.md — Profile vertical slice: User model vehicle fields + UserNotifier.updateProfile + Wave 0 profile/provider tests + full ProfileScreen (PROF-01..03)
 **UI hint**: yes
 
@@ -149,4 +149,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Auth + State Layer | 0/3 | Not started | - |
 | 3. Core Shopping Loop | 0/TBD | Not started | - |
 | 4. Smart Coins | 0/TBD | Not started | - |
-| 5. Price Registration + Profile | 0/2 | Not started | - |
+| 5. Price Registration + Profile | 1/2 | In Progress | - |

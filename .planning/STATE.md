@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-06-03T00:46:39.059Z"
-last_activity: 2026-06-03 -- Phase 05 planning complete
+stopped_at: Phase 05 Plan 01 complete
+last_updated: "2026-06-03T01:00:36Z"
+last_activity: 2026-06-03 -- Phase 05 Plan 01 executed — ScannerScreen wizard
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 13
-  completed_plans: 11
-  percent: 80
+  completed_plans: 12
+  percent: 85
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-25)
 
 **Core value:** Ajudar usuários a fazer compras mais baratas mostrando qual supermercado tem o menor preço final, incluindo o custo de deslocamento por combustível.
-**Current focus:** Phase 04 — next phase (Phase 3 done, human UAT pending)
+**Current focus:** Phase 05 — Price Registration + Profile
 
 ## Current Position
 
-Phase: 3 (COMPLETE)
-Plan: All 4 plans executed
-Status: Ready to execute
-Last activity: 2026-06-03 -- Phase 05 planning complete
+Phase: 05 (Price Registration + Profile) — EXECUTING
+Plan: 2 of 2
+Status: Executing Phase 05 — Plan 01 complete
+Last activity: 2026-06-03 -- ScannerScreen 3-step wizard, PREG-01..04, confetti, AppStrings
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 85%
 
 ## Performance Metrics
 
@@ -76,6 +76,9 @@ Recent decisions affecting current work:
 - Phase 03: ShoppingListScreen rewritten with fuel toggle + total + AlertDialog + Comparar button
 - Phase 03: PriceComparisonScreen implemented with winner highlight + fuel breakdown
 - Phase 03: Tab2 renamed Scanner; subroutes /home/product/:id and /shopping-list/comparison declared
+- Phase 05-01: confetti ^0.7.0 added; AppStrings.scanReceiptDescription = 'Cadastro de nota fiscal'
+- Phase 05-01: ScannerScreen ConsumerStatefulWidget PageView wizard replaces placeholder
+- Phase 05-01: _returnHome() = jumpToPage(0) only (A4 mitigation); addPostFrameCallback for play() (A3)
 
 ### Pending Todos
 
@@ -90,10 +93,10 @@ None.
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| lint-info | 9 prefer_const_constructors infos in home_screen.dart + shopping_list_screen.dart | open | 05-01 |
 
 ## Session Continuity
 
-Last session: 2026-06-03T00:27:15.606Z
-Stopped at: Phase 5 UI-SPEC approved
-Resume file: .planning/phases/05-price-registration-profile/05-UI-SPEC.md
+Last session: 2026-06-03T01:00:36Z
+Stopped at: Completed Phase 05 Plan 01 — ScannerScreen wizard, all PREG tests green
+Resume file: .planning/phases/05-price-registration-profile/05-02-PLAN.md
