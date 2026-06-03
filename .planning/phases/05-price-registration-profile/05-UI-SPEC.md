@@ -71,9 +71,8 @@ created: 2026-06-02
 
 | Role | TextTheme Token | Approx Size | Weight | Line Height | Use In This Phase |
 |------|----------------|-------------|--------|-------------|-------------------|
-| Screen title | `headlineMedium` | ~28 px | 700 (bold) | 1.2 | "Escanear Nota" (Step 1 header), "Perfil" (Profile AppBar) |
-| Card heading | `titleLarge` | ~22 px | 600 (semibold) | 1.2 | Receipt supermarket name (Step 2), "+10 Smart Coins" (Step 3) |
-| Section label | `titleMedium` | ~16 px | 600 (semibold) | 1.4 | "Dados Pessoais", "Veículo", "Impacto Social" |
+| Screen title / coin award | `headlineMedium` | ~28 px | 700 (bold) | 1.2 | "Escanear Nota" (Step 1 header), "+10 Smart Coins" (Step 3), "Perfil" (Profile AppBar) |
+| Card heading / section label | `titleMedium` | ~16 px | 700 (bold) | 1.4 | Receipt supermarket name (Step 2), receipt total label/value, "Dados Pessoais", "Veículo", "Impacto Social", all CTA button labels |
 | Body / field label | `bodyMedium` | ~14 px | 400 (regular) | 1.5 | Field hints, receipt line items, stat descriptions |
 | Supporting / caption | `bodySmall` | ~12 px | 400 (regular) | 1.4 | Date under receipt total, secondary labels |
 
@@ -147,7 +146,7 @@ Container [glassmorphic card recipe, height: 100 px]
     Icon [method icon, 36 px, AppColors.primary]
     SizedBox(width: spacingM)
     Column (crossAxisAlignment: start)
-      Text [card title, titleMedium, weight 600, AppColors.textMain]
+      Text [card title, titleMedium, weight 700, AppColors.textMain]
       Text [card subtitle, bodySmall, AppColors.textSecondary]
 ```
 
@@ -203,15 +202,15 @@ Container [glassmorphic card recipe]
     Row
       Icon [LucideIcons.store, 20 px, AppColors.primary]
       SizedBox(width: spacingS)
-      Text ["Bistek Supermercados", titleMedium, weight 600, AppColors.textMain]
+      Text ["Bistek Supermercados", titleMedium, weight 700, AppColors.textMain]
     SizedBox(height: spacingXS)
     Text [formatted date, bodySmall, AppColors.textSecondary]   ← DateFormat('dd/MM/yyyy')
     Divider [color: Colors.white.withValues(alpha: 0.1), height: spacingL]
     Column → _ReceiptLineItem × 3-4
     Divider [same style]
     Row (mainAxisAlignment: spaceBetween)
-      Text ["Total", titleMedium, weight 600, AppColors.textMain]
-      Text ["R$ 87,43", titleLarge, weight 700, AppColors.primary]
+      Text ["Total", titleMedium, weight 700, AppColors.textMain]
+      Text ["R$ 87,43", titleMedium, weight 700, AppColors.primary]
     SizedBox(height: spacingS)
     Row (mainAxisAlignment: center)
       Icon [LucideIcons.coins, 14 px, AppColors.primary]
@@ -242,7 +241,7 @@ ElevatedButton
   child: Row
     Icon [LucideIcons.coins, 18 px]
     SizedBox(width: spacingS)
-    Text ["Confirmar e Ganhar Moedas", titleMedium, weight 600]
+    Text ["Confirmar e Ganhar Moedas", titleMedium, weight 700]
 ```
 
 `onPressed` → `_confirmReceipt()` → `coinProvider.notifier.addCoins(10, 'Cadastro de nota fiscal')` → `_pageController.nextPage(...)`.
@@ -262,7 +261,7 @@ Stack (alignment: topCenter)
       SizedBox(height: spacingL)
       Text ["+10 Smart Coins", headlineMedium, weight 700, AppColors.primary, center]
       SizedBox(height: spacingS)
-      Text ["Nota fiscal cadastrada com sucesso!", titleMedium, AppColors.textMain, center]
+      Text ["Nota fiscal cadastrada com sucesso!", titleMedium, weight 700, AppColors.textMain, center]
       SizedBox(height: spacingXS)
       Text ["Obrigado por contribuir com dados de preços.", bodyMedium, AppColors.textSecondary, center]
       SizedBox(height: spacingXL)
@@ -313,7 +312,7 @@ OutlinedButton
     borderRadius: AppSizes.radiusM
     padding: EdgeInsets.symmetric(vertical: 14)
     minimumSize: Size(double.infinity, 52)
-  child: Text ["Escanear Outra Nota", titleMedium, weight 600]
+  child: Text ["Escanear Outra Nota", titleMedium, weight 700]
   onPressed → _returnHome()    ← jumpToPage(0) first, then no go() needed
 ```
 
@@ -367,7 +366,7 @@ Container (bg: AppColors.background)
       backgroundColor: AppColors.primary.withValues(alpha: 0.15)
       child: Text [user initials, headlineMedium, AppColors.primary, weight 700]
     SizedBox(height: spacingS)
-    Text [user name, titleLarge, AppColors.textMain, weight 600]
+    Text [user name, titleMedium, weight 700, AppColors.textMain]
     Text [user email, bodyMedium, AppColors.textSecondary]
 ```
 
@@ -379,7 +378,7 @@ User initials: `name.split(' ').map((w) => w[0]).take(2).join().toUpperCase()`.
 Container [glassmorphic card recipe]
   padding: spacingL
   Column
-    Text [section title, titleMedium, weight 600, AppColors.textMain]
+    Text [section title, titleMedium, weight 700, AppColors.textMain]
     SizedBox(height: spacingM)
     _ProfileField × N   ← one per editable field
 ```
@@ -431,7 +430,7 @@ Gap between fields within a section: `AppSizes.spacingM` (16 px).
 Container [glassmorphic card recipe]
   padding: spacingL
   Column
-    Text ["Impacto Social", titleMedium, weight 600, AppColors.textMain]
+    Text ["Impacto Social", titleMedium, weight 700, AppColors.textMain]
     SizedBox(height: spacingM)
     Row
       _StatChip [Notas Escaneadas]    ← derived from coinProvider
@@ -454,7 +453,7 @@ Container
   Column (mainAxisAlignment: center, crossAxisAlignment: center)
     Icon [stat icon, 24 px, AppColors.primary]
     SizedBox(height: spacingXS)
-    Text [value, titleLarge, weight 700, AppColors.textMain]
+    Text [value, titleMedium, weight 700, AppColors.textMain]
     SizedBox(height: spacingXS)
     Text [label, bodySmall, AppColors.textSecondary, center, maxLines: 2]
 ```
@@ -488,7 +487,7 @@ ElevatedButton
   child: Row
     Icon [LucideIcons.save, 18 px]
     SizedBox(width: spacingS)
-    Text ["Salvar Alterações", titleMedium, weight 600]
+    Text ["Salvar Alterações", titleMedium, weight 700]
   onPressed → _save()
 ```
 
@@ -625,7 +624,7 @@ These are project-wide rules that apply within this phase:
 |----------------------|--------|----------------|
 | Color tokens | `app_colors.dart` (codebase) | All 7 colors (background, primary, surface, surfaceElevated, success, error, textMain, textSecondary) |
 | Spacing tokens | `app_sizes.dart` (codebase) | 5 spacing values + 4 radius values |
-| Typography tokens | `ThemeData` pattern from `login_screen.dart` + `store_screen.dart` | 5 text style roles |
+| Typography tokens | `ThemeData` pattern from `login_screen.dart` + `store_screen.dart` | 4 text style roles: headlineMedium, titleMedium, bodyMedium, bodySmall — 2 weights: 400 + 700 |
 | Glassmorphic card recipe | `login_screen.dart` line 100, `store_screen.dart` line 57 | surface + alpha + border pattern |
 | Loading overlay pattern | `shopping_list_screen.dart` (cited in CONTEXT.md) | Stack + black overlay + CircularProgressIndicator |
 | TextField decoration | `login_screen.dart` lines 112–132 | Full InputDecoration recipe |
@@ -652,7 +651,7 @@ The `gsd-ui-checker` validates this spec against 6 dimensions. Expected outcomes
 | Dimension | Status | Evidence |
 |-----------|--------|---------|
 | 1. Spacing — all values are multiples of 4 | PASS | All values from `AppSizes.*` (4, 8, 16, 24, 32) |
-| 2. Typography — 3-4 sizes, max 2 weights | PASS | 5 TextTheme roles (maps to ~4 visual sizes); 2 weights: 400 regular + 600/700 bold |
+| 2. Typography — 3-4 sizes, max 2 weights | PASS | 4 sizes: headlineMedium (~28px), titleMedium (~16px), bodyMedium (~14px), bodySmall (~12px); 2 weights: 400 (regular) + 700 (bold) |
 | 3. Color — 60/30/10 split, accent reserved | PASS | background 60%, surface 30%, primary 10% (buttons + coin text only) |
 | 4. Copywriting — CTA, empty, error, destructive | PASS | All CTAs defined; empty states handled; no destructive actions in scope |
 | 5. Registry safety — vetting gate complete | PASS | confetti audited via RESEARCH.md; no shadcn registries |
