@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -22,14 +22,14 @@ class PriceComparisonScreen extends ConsumerWidget {
     final fuelToggle = ref.watch(fuelToggleProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        title: const Text(
+        backgroundColor: context.appColors.background,
+        title: Text(
           'Comparação de Preços',
-          style: TextStyle(color: AppColors.textMain),
+          style: TextStyle(color: context.appColors.textMain),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textMain),
+        iconTheme: IconThemeData(color: context.appColors.textMain),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(AppSizes.spacingM),
@@ -41,12 +41,12 @@ class PriceComparisonScreen extends ConsumerWidget {
 
           final card = Container(
             decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.7),
+              color: context.appColors.surface.withValues(alpha: 0.7),
               borderRadius: BorderRadius.circular(AppSizes.radiusL),
               border: Border.all(
                 color: isWinner
                     ? AppColors.primary
-                    : Colors.white.withValues(alpha: 0.1),
+                    : context.appColors.glassBorder,
                 width: isWinner ? 2.0 : 1.0,
               ),
             ),
@@ -60,7 +60,7 @@ class PriceComparisonScreen extends ConsumerWidget {
                     Text(
                       result.supermarket,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.textMain,
+                            color: context.appColors.textMain,
                           ),
                     ),
                     const Spacer(),
@@ -78,7 +78,7 @@ class PriceComparisonScreen extends ConsumerWidget {
                           'Melhor opção',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.background,
+                                    color: context.appColors.background,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -93,13 +93,13 @@ class PriceComparisonScreen extends ConsumerWidget {
                     Text(
                       'Produtos',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: context.appColors.textSecondary,
                           ),
                     ),
                     Text(
                       _brl.format(result.productsCost),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textMain,
+                            color: context.appColors.textMain,
                           ),
                     ),
                   ],
@@ -118,14 +118,14 @@ class PriceComparisonScreen extends ConsumerWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
-                                ?.copyWith(color: AppColors.textSecondary),
+                                ?.copyWith(color: context.appColors.textSecondary),
                           ),
                           Text(
                             '${result.distanceKm.toStringAsFixed(1)} km',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
-                                ?.copyWith(color: AppColors.textSecondary),
+                                ?.copyWith(color: context.appColors.textSecondary),
                           ),
                         ],
                       ),
@@ -133,7 +133,7 @@ class PriceComparisonScreen extends ConsumerWidget {
                         _brl.format(result.fuelCost),
                         style:
                             Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: AppColors.textMain,
+                                  color: context.appColors.textMain,
                                 ),
                       ),
                     ],
@@ -149,7 +149,7 @@ class PriceComparisonScreen extends ConsumerWidget {
                     Text(
                       'Total',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: context.appColors.textSecondary,
                           ),
                     ),
                     Text(
@@ -158,7 +158,7 @@ class PriceComparisonScreen extends ConsumerWidget {
                             fontWeight: FontWeight.w600,
                             color: isWinner
                                 ? AppColors.primary
-                                : AppColors.textMain,
+                                : context.appColors.textMain,
                           ),
                     ),
                   ],

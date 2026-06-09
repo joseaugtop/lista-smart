@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,12 +28,12 @@ class ProductDetailScreen extends ConsumerWidget {
 
     if (product == null) {
       return Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appColors.background,
         appBar: AppBar(title: const Text('Produto')),
-        body: const Center(
+        body: Center(
           child: Text(
             'Produto não encontrado.',
-            style: TextStyle(color: AppColors.textSecondary),
+            style: TextStyle(color: context.appColors.textSecondary),
           ),
         ),
       );
@@ -53,9 +53,9 @@ class ProductDetailScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appColors.background,
         title: Text(product.name),
       ),
       body: SingleChildScrollView(
@@ -68,7 +68,7 @@ class ProductDetailScreen extends ConsumerWidget {
                   ? () => _showImageModal(context, product.imageUrl)
                   : null,
               child: ColoredBox(
-                color: AppColors.surfaceElevated,
+                color: context.appColors.surfaceElevated,
                 child: SizedBox(
                   width: double.infinity,
                   child: product.imageUrl.isNotEmpty
@@ -89,8 +89,8 @@ class ProductDetailScreen extends ConsumerWidget {
                   // Product name & brand
                   Text(
               product.name,
-              style: const TextStyle(
-                color: AppColors.textMain,
+              style: TextStyle(
+                color: context.appColors.textMain,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -98,7 +98,7 @@ class ProductDetailScreen extends ConsumerWidget {
             const SizedBox(height: AppSizes.spacingXS),
             Text(
               product.brand,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+              style: TextStyle(color: context.appColors.textSecondary, fontSize: 14),
             ),
             const SizedBox(height: AppSizes.spacingM),
 
@@ -115,10 +115,10 @@ class ProductDetailScreen extends ConsumerWidget {
 
             // Price table
             if (productPrices.isNotEmpty) ...[
-              const Text(
+              Text(
                 'Preços por supermercado',
                 style: TextStyle(
-                  color: AppColors.textMain,
+                  color: context.appColors.textMain,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
@@ -135,12 +135,12 @@ class ProductDetailScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isLowest
                         ? AppColors.primary.withValues(alpha: 0.10)
-                        : AppColors.surface,
+                        : context.appColors.surface,
                     borderRadius: BorderRadius.circular(AppSizes.radiusS),
                     border: Border.all(
                       color: isLowest
                           ? AppColors.primary
-                          : AppColors.surfaceElevated,
+                          : context.appColors.surfaceElevated,
                       width: 1,
                     ),
                   ),
@@ -152,7 +152,7 @@ class ProductDetailScreen extends ConsumerWidget {
                         style: TextStyle(
                           color: isLowest
                               ? AppColors.primary
-                              : AppColors.textMain,
+                              : context.appColors.textMain,
                           fontWeight: isLowest
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -171,10 +171,10 @@ class ProductDetailScreen extends ConsumerWidget {
                                 color: AppColors.primary,
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Menor',
                                 style: TextStyle(
-                                  color: AppColors.background,
+                                  color: context.appColors.background,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -185,7 +185,7 @@ class ProductDetailScreen extends ConsumerWidget {
                             style: TextStyle(
                               color: isLowest
                                   ? AppColors.primary
-                                  : AppColors.textMain,
+                                  : context.appColors.textMain,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -208,7 +208,7 @@ class ProductDetailScreen extends ConsumerWidget {
                   return Container(
                     padding: const EdgeInsets.all(AppSizes.spacingM),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceElevated,
+                      color: context.appColors.surfaceElevated,
                       borderRadius: BorderRadius.circular(AppSizes.radiusM),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.06),
@@ -216,24 +216,24 @@ class ProductDetailScreen extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(LucideIcons.trendingDown,
-                            size: 16, color: AppColors.textSecondary),
+                        Icon(LucideIcons.trendingDown,
+                            size: 16, color: context.appColors.textSecondary),
                         const SizedBox(width: AppSizes.spacingS),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'Preço médio',
                                 style: TextStyle(
-                                  color: AppColors.textSecondary,
+                                  color: context.appColors.textSecondary,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
                                 currencyFormat.format(avg),
-                                style: const TextStyle(
-                                  color: AppColors.textMain,
+                                style: TextStyle(
+                                  color: context.appColors.textMain,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),
@@ -244,17 +244,17 @@ class ProductDetailScreen extends ConsumerWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            const Text(
+                            Text(
                               'Variação',
                               style: TextStyle(
-                                color: AppColors.textSecondary,
+                                color: context.appColors.textSecondary,
                                 fontSize: 11,
                               ),
                             ),
                             Text(
                               currencyFormat.format(spread),
-                              style: const TextStyle(
-                                color: AppColors.textSecondary,
+                              style: TextStyle(
+                                color: context.appColors.textSecondary,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -291,7 +291,7 @@ class ProductDetailScreen extends ConsumerWidget {
               },
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                foregroundColor: context.appColors.background,
                 padding: const EdgeInsets.symmetric(vertical: AppSizes.spacingM),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.radiusL),
@@ -317,8 +317,8 @@ class ProductDetailScreen extends ConsumerWidget {
                       );
                     },
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.textMain,
-                side: const BorderSide(color: AppColors.surfaceElevated),
+                foregroundColor: context.appColors.textMain,
+                side: BorderSide(color: context.appColors.surfaceElevated),
                 padding: const EdgeInsets.symmetric(vertical: AppSizes.spacingM),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.radiusL),
@@ -422,11 +422,11 @@ class _PlaceholderImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surfaceElevated,
-      child: const Center(
+      color: context.appColors.surfaceElevated,
+      child: Center(
         child: Icon(
           LucideIcons.packageOpen,
-          color: AppColors.textSecondary,
+          color: context.appColors.textSecondary,
           size: 64,
         ),
       ),
@@ -448,12 +448,12 @@ class _MetadataRow extends StatelessWidget {
         children: [
           Text(
             '$label: ',
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+            style: TextStyle(color: context.appColors.textSecondary, fontSize: 13),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(color: AppColors.textMain, fontSize: 13),
+              style: TextStyle(color: context.appColors.textMain, fontSize: 13),
               overflow: TextOverflow.ellipsis,
             ),
           ),

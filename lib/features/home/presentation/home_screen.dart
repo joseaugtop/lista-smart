@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -47,12 +47,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final initials = _initials(user?.name ?? 'JA');
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appColors.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             pinned: true,
-            backgroundColor: AppColors.background,
+            backgroundColor: context.appColors.background,
             leading: GestureDetector(
               onTap: () => context.push(AppRoutes.profile),
               child: Container(
@@ -64,8 +64,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   initials,
-                  style: const TextStyle(
-                    color: AppColors.background,
+                  style: TextStyle(
+                    color: context.appColors.background,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -78,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   LucideIcons.star,
                   color: showFavOnly
                       ? AppColors.primary
-                      : AppColors.textSecondary,
+                      : context.appColors.textSecondary,
                 ),
                 tooltip: showFavOnly
                     ? 'Mostrar todos os produtos'
@@ -91,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   LucideIcons.layoutGrid,
                   color: viewMode == ViewMode.grid
                       ? AppColors.primary
-                      : AppColors.textSecondary,
+                      : context.appColors.textSecondary,
                 ),
                 tooltip: 'Exibir em grade',
                 onPressed: () =>
@@ -102,7 +102,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   LucideIcons.list,
                   color: viewMode == ViewMode.list
                       ? AppColors.primary
-                      : AppColors.textSecondary,
+                      : context.appColors.textSecondary,
                 ),
                 tooltip: 'Exibir em lista',
                 onPressed: () =>
@@ -114,24 +114,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             pinned: true,
             delegate: _StickySearchBarDelegate(
               child: ColoredBox(
-                color: AppColors.background,
+                color: context.appColors.background,
                 child: Padding(
                   padding: const EdgeInsets.all(AppSizes.spacingS),
                   child: TextField(
                     controller: _searchController,
-                    style: const TextStyle(color: AppColors.textMain),
+                    style: TextStyle(color: context.appColors.textMain),
                     onChanged: (v) =>
                         ref.read(searchQueryProvider.notifier).update(v),
                     decoration: InputDecoration(
                       hintText: 'Buscar produtos...',
                       hintStyle:
-                          const TextStyle(color: AppColors.textSecondary),
-                      prefixIcon: const Icon(
+                          TextStyle(color: context.appColors.textSecondary),
+                      prefixIcon: Icon(
                         LucideIcons.search,
-                        color: AppColors.textSecondary,
+                        color: context.appColors.textSecondary,
                       ),
                       filled: true,
-                      fillColor: AppColors.surfaceElevated,
+                      fillColor: context.appColors.surfaceElevated,
                       border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.circular(AppSizes.radiusM),
@@ -158,7 +158,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Icon(
                       showFavOnly ? LucideIcons.star : LucideIcons.search,
                       size: 48,
-                      color: AppColors.textSecondary,
+                      color: context.appColors.textSecondary,
                     ),
                     const SizedBox(height: AppSizes.spacingM),
                     Text(
@@ -166,15 +166,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ? 'Nenhum favorito ainda'
                           : 'Nenhum produto encontrado para "$searchQuery"',
                       style:
-                          const TextStyle(color: AppColors.textSecondary),
+                          TextStyle(color: context.appColors.textSecondary),
                       textAlign: TextAlign.center,
                     ),
                     if (showFavOnly) ...[
                       const SizedBox(height: AppSizes.spacingS),
                       Text(
                         'Toque na estrela em um produto para favoritá-lo',
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
+                        style: TextStyle(
+                          color: context.appColors.textSecondary,
                           fontSize: 12,
                         ),
                         textAlign: TextAlign.center,
@@ -220,7 +220,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.go(AppRoutes.scanner),
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
+        foregroundColor: context.appColors.background,
         tooltip: 'Escanear nota fiscal',
         child: const Icon(LucideIcons.scanLine),
       ),

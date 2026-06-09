@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -29,10 +29,10 @@ class ProductCardGrid extends ConsumerWidget {
       onTap: () => context.push(AppRoutes.productDetailPath(product.id)),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appColors.surface,
           borderRadius: BorderRadius.circular(AppSizes.radiusL),
           border: Border.all(
-            color: AppColors.surfaceElevated,
+            color: context.appColors.surfaceElevated,
             width: 1,
           ),
         ),
@@ -47,7 +47,7 @@ class ProductCardGrid extends ConsumerWidget {
                   top: Radius.circular(AppSizes.radiusL),
                 ),
                 child: ColoredBox(
-                  color: AppColors.surfaceElevated,
+                  color: context.appColors.surfaceElevated,
                   child: product.imageUrl.isNotEmpty
                       ? Image.network(
                           product.imageUrl,
@@ -68,8 +68,8 @@ class ProductCardGrid extends ConsumerWidget {
                   children: [
                     Text(
                       product.name,
-                      style: const TextStyle(
-                        color: AppColors.textMain,
+                      style: TextStyle(
+                        color: context.appColors.textMain,
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
                       ),
@@ -79,8 +79,8 @@ class ProductCardGrid extends ConsumerWidget {
                     const SizedBox(height: 2),
                     Text(
                       product.brand,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
+                      style: TextStyle(
+                        color: context.appColors.textSecondary,
                         fontSize: 11,
                       ),
                       maxLines: 1,
@@ -118,7 +118,7 @@ class ProductCardGrid extends ConsumerWidget {
                               LucideIcons.star,
                               color: isFavorite
                                   ? AppColors.primary
-                                  : AppColors.textSecondary,
+                                  : context.appColors.textSecondary,
                               size: 16,
                               semanticLabel: isFavorite
                                   ? 'Remover dos favoritos'
@@ -143,11 +143,11 @@ class _PlaceholderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surfaceElevated,
-      child: const Center(
+      color: context.appColors.surfaceElevated,
+      child: Center(
         child: Icon(
           LucideIcons.packageOpen,
-          color: AppColors.textSecondary,
+          color: context.appColors.textSecondary,
           size: 40,
         ),
       ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -29,11 +29,11 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('Limpar carrinho?',
-            style: TextStyle(color: AppColors.textMain)),
-        content: const Text('Todos os itens serão removidos.',
-            style: TextStyle(color: AppColors.textSecondary)),
+        backgroundColor: context.appColors.surface,
+        title: Text('Limpar carrinho?',
+            style: TextStyle(color: context.appColors.textMain)),
+        content: Text('Todos os itens serão removidos.',
+            style: TextStyle(color: context.appColors.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -43,7 +43,7 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
-              foregroundColor: AppColors.textMain,
+              foregroundColor: context.appColors.textMain,
             ),
             child: const Text('Limpar Carrinho'),
           ),
@@ -86,28 +86,28 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
 
     if (cart.isEmpty) {
       return Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appColors.background,
         appBar: AppBar(
-          backgroundColor: AppColors.background,
-          title: const Text('Minha Lista',
-              style: TextStyle(color: AppColors.textMain)),
+          backgroundColor: context.appColors.background,
+          title: Text('Minha Lista',
+              style: TextStyle(color: context.appColors.textMain)),
         ),
         body: SafeArea(
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(LucideIcons.shoppingCart,
-                    size: 64, color: AppColors.textSecondary),
+                Icon(LucideIcons.shoppingCart,
+                    size: 64, color: context.appColors.textSecondary),
                 const SizedBox(height: AppSizes.spacingM),
                 Text('Sua lista está vazia',
                     style: theme.headlineSmall
-                        ?.copyWith(color: AppColors.textMain)),
+                        ?.copyWith(color: context.appColors.textMain)),
                 const SizedBox(height: AppSizes.spacingS),
                 Text(
                   'Adicione produtos na tela Home',
                   style: theme.bodyMedium
-                      ?.copyWith(color: AppColors.textSecondary),
+                      ?.copyWith(color: context.appColors.textSecondary),
                 ),
               ],
             ),
@@ -123,11 +123,11 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: context.appColors.background,
           appBar: AppBar(
-            backgroundColor: AppColors.background,
-            title: const Text('Minha Lista',
-                style: TextStyle(color: AppColors.textMain)),
+            backgroundColor: context.appColors.background,
+            title: Text('Minha Lista',
+                style: TextStyle(color: context.appColors.textMain)),
             actions: [
               // Coin balance chip
               Container(
@@ -156,8 +156,8 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                 ),
               ),
               IconButton(
-                icon: const Icon(LucideIcons.trash2,
-                    color: AppColors.textMain),
+                icon: Icon(LucideIcons.trash2,
+                    color: context.appColors.textMain),
                 tooltip: 'Limpar carrinho',
                 onPressed: _confirmClear,
               ),
@@ -176,11 +176,11 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                       final item = cart[index];
                       return Container(
                         decoration: BoxDecoration(
-                          color: AppColors.surface.withValues(alpha: 0.7),
+                          color: context.appColors.surface.withValues(alpha: 0.7),
                           borderRadius:
                               BorderRadius.circular(AppSizes.radiusL),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1),
+                            color: context.appColors.glassBorder,
                             width: 1.0,
                           ),
                         ),
@@ -195,10 +195,10 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                 width: 64,
                                 height: 64,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => const Icon(
+                                errorBuilder: (_, __, ___) => Icon(
                                   LucideIcons.packageOpen,
                                   size: 64,
-                                  color: AppColors.textSecondary,
+                                  color: context.appColors.textSecondary,
                                 ),
                               ),
                             ),
@@ -210,12 +210,12 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                   Text(
                                     item.productName,
                                     style: theme.titleMedium
-                                        ?.copyWith(color: AppColors.textMain),
+                                        ?.copyWith(color: context.appColors.textMain),
                                   ),
                                   Text(
                                     item.brand,
                                     style: theme.bodySmall?.copyWith(
-                                        color: AppColors.textSecondary),
+                                        color: context.appColors.textSecondary),
                                   ),
                                 ],
                               ),
@@ -226,8 +226,8 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                   width: 44,
                                   height: 44,
                                   child: IconButton(
-                                    icon: const Icon(LucideIcons.minus,
-                                        color: AppColors.textMain),
+                                    icon: Icon(LucideIcons.minus,
+                                        color: context.appColors.textMain),
                                     onPressed: () => ref
                                         .read(cartProvider.notifier)
                                         .decrementQuantity(item.productId),
@@ -236,13 +236,13 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                 ),
                                 Text('${item.quantity}',
                                     style: theme.bodyMedium?.copyWith(
-                                        color: AppColors.textMain)),
+                                        color: context.appColors.textMain)),
                                 SizedBox(
                                   width: 44,
                                   height: 44,
                                   child: IconButton(
-                                    icon: const Icon(LucideIcons.plus,
-                                        color: AppColors.textMain),
+                                    icon: Icon(LucideIcons.plus,
+                                        color: context.appColors.textMain),
                                     onPressed: () => ref
                                         .read(cartProvider.notifier)
                                         .incrementQuantity(item.productId),
@@ -253,8 +253,8 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                   width: 44,
                                   height: 44,
                                   child: IconButton(
-                                    icon: const Icon(LucideIcons.x,
-                                        color: AppColors.textSecondary),
+                                    icon: Icon(LucideIcons.x,
+                                        color: context.appColors.textSecondary),
                                     onPressed: () => ref
                                         .read(cartProvider.notifier)
                                         .removeItem(item.productId),
@@ -271,10 +271,10 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: context.appColors.surface,
                     border: Border(
                       top: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.1)),
+                          color: context.appColors.glassBorder),
                     ),
                   ),
                   padding: const EdgeInsets.all(AppSizes.spacingM),
@@ -290,12 +290,12 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                 Text(
                                   'Considerar deslocamento',
                                   style: theme.bodyMedium
-                                      ?.copyWith(color: AppColors.textMain),
+                                      ?.copyWith(color: context.appColors.textMain),
                                 ),
                                 Text(
                                   'Fiat Uno · 12 km/L · R\$ 6,50/L',
                                   style: theme.bodySmall?.copyWith(
-                                      color: AppColors.textSecondary),
+                                      color: context.appColors.textSecondary),
                                 ),
                               ],
                             ),
@@ -315,11 +315,11 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                         children: [
                           Text('Total estimado',
                               style: theme.bodySmall?.copyWith(
-                                  color: AppColors.textSecondary)),
+                                  color: context.appColors.textSecondary)),
                           Text(
                             _brl.format(total),
                             style: theme.titleMedium?.copyWith(
-                              color: AppColors.textMain,
+                              color: context.appColors.textMain,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -335,10 +335,10 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                           style: FilledButton.styleFrom(
                             backgroundColor: hasEnoughCoins
                                 ? AppColors.primary
-                                : AppColors.surfaceElevated,
+                                : context.appColors.surfaceElevated,
                             foregroundColor: hasEnoughCoins
-                                ? AppColors.background
-                                : AppColors.textSecondary,
+                                ? context.appColors.background
+                                : context.appColors.textSecondary,
                             padding: const EdgeInsets.symmetric(
                                 vertical: AppSizes.spacingM),
                             shape: RoundedRectangleBorder(
@@ -358,8 +358,8 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                                     LucideIcons.coins,
                                     size: 13,
                                     color: hasEnoughCoins
-                                        ? AppColors.background
-                                        : AppColors.textSecondary,
+                                        ? context.appColors.background
+                                        : context.appColors.textSecondary,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
@@ -387,10 +387,10 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
               child: Container(
                 padding: const EdgeInsets.all(AppSizes.spacingL),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appColors.surface,
                   borderRadius: BorderRadius.circular(AppSizes.radiusL),
                   border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1)),
+                      color: context.appColors.glassBorder),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -400,7 +400,7 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                     const SizedBox(height: AppSizes.spacingM),
                     Text(
                       'Comparando preços...',
-                      style: TextStyle(color: AppColors.textMain),
+                      style: TextStyle(color: context.appColors.textMain),
                     ),
                     const SizedBox(height: AppSizes.spacingS),
                     Row(
@@ -411,8 +411,8 @@ class _ShoppingListScreenState extends ConsumerState<ShoppingListScreen> {
                         const SizedBox(width: 4),
                         Text(
                           '$_comparisonCoinCost Smart Coins debitados',
-                          style: const TextStyle(
-                            color: AppColors.textSecondary,
+                          style: TextStyle(
+                            color: context.appColors.textSecondary,
                             fontSize: 12,
                           ),
                         ),

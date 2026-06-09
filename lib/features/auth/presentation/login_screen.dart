@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +38,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appColors.background,
       body: Stack(
         children: [
           // Blob 1: top-right
@@ -90,17 +90,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Text(
                     'Faça compras mais inteligentes',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.textSecondary,
+                          color: context.appColors.textSecondary,
                         ),
                   ),
                   const SizedBox(height: AppSizes.spacingXL),
                   // Glassmorphic card
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.surface.withValues(alpha: 0.7),
+                      color: context.appColors.surface.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(AppSizes.radiusXL),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: context.appColors.glassBorder,
                         width: 1.0,
                       ),
                     ),
@@ -112,17 +112,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(color: AppColors.textMain),
+                          style: TextStyle(color: context.appColors.textMain),
                           decoration: InputDecoration(
                             hintText: 'seu@email.com',
-                            hintStyle: const TextStyle(color: AppColors.textSecondary),
-                            prefixIcon: const Icon(LucideIcons.mail, color: AppColors.textSecondary),
+                            hintStyle: TextStyle(color: context.appColors.textSecondary),
+                            prefixIcon: Icon(LucideIcons.mail, color: context.appColors.textSecondary),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSizes.radiusM),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSizes.radiusM),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                              borderSide: BorderSide(color: context.appColors.glassBorder),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSizes.radiusM),
@@ -135,17 +135,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         TextFormField(
                           controller: _passwordController,
                           obscureText: !_isPasswordVisible,
-                          style: const TextStyle(color: AppColors.textMain),
+                          style: TextStyle(color: context.appColors.textMain),
                           decoration: InputDecoration(
                             hintText: 'senha',
-                            hintStyle: const TextStyle(color: AppColors.textSecondary),
-                            prefixIcon: const Icon(LucideIcons.lock, color: AppColors.textSecondary),
+                            hintStyle: TextStyle(color: context.appColors.textSecondary),
+                            prefixIcon: Icon(LucideIcons.lock, color: context.appColors.textSecondary),
                             suffixIcon: Tooltip(
                               message: _isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha',
                               child: IconButton(
                                 icon: Icon(
                                   _isPasswordVisible ? LucideIcons.eyeOff : LucideIcons.eye,
-                                  color: AppColors.textSecondary,
+                                  color: context.appColors.textSecondary,
                                 ),
                                 onPressed: () => setState(
                                   () => _isPasswordVisible = !_isPasswordVisible,
@@ -157,7 +157,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSizes.radiusM),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                              borderSide: BorderSide(color: context.appColors.glassBorder),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppSizes.radiusM),
@@ -182,7 +182,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   onPressed: _handleLogin,
                                   style: FilledButton.styleFrom(
                                     backgroundColor: AppColors.primary,
-                                    foregroundColor: AppColors.background,
+                                    foregroundColor: context.appColors.background,
                                     padding: const EdgeInsets.symmetric(
                                       vertical: AppSizes.spacingM,
                                     ),

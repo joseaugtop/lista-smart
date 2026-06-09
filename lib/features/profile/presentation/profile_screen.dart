@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -81,17 +81,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userEmail = user?.email ?? '';
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appColors.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 160,
             pinned: true,
-            backgroundColor: AppColors.background,
-            title: const Text(
+            backgroundColor: context.appColors.background,
+            title: Text(
               'Perfil',
               style: TextStyle(
-                color: AppColors.textMain,
+                color: context.appColors.textMain,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -162,7 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     onPressed: _save,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
+                      foregroundColor: context.appColors.background,
                       minimumSize: const Size(double.infinity, 52),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppSizes.radiusM),
@@ -202,18 +202,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
-      style: const TextStyle(color: AppColors.textMain),
+      style: TextStyle(color: context.appColors.textMain),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: AppColors.textSecondary),
-        prefixIcon: Icon(icon, color: AppColors.textSecondary),
+        labelStyle: TextStyle(color: context.appColors.textSecondary),
+        prefixIcon: Icon(icon, color: context.appColors.textSecondary),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusM),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusM),
           borderSide:
-              BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+              BorderSide(color: context.appColors.glassBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusM),
@@ -222,7 +222,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
         filled: true,
         fillColor:
-            AppColors.surfaceElevated.withValues(alpha: 0.4),
+            context.appColors.surfaceElevated.withValues(alpha: 0.4),
       ),
     );
   }
@@ -254,7 +254,7 @@ class _AvatarHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.background,
+      color: context.appColors.background,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -277,8 +277,8 @@ class _AvatarHeader extends StatelessWidget {
           const SizedBox(height: AppSizes.spacingS),
           Text(
             userName,
-            style: const TextStyle(
-              color: AppColors.textMain,
+            style: TextStyle(
+              color: context.appColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
@@ -286,8 +286,8 @@ class _AvatarHeader extends StatelessWidget {
           const SizedBox(height: AppSizes.spacingXS),
           Text(
             userEmail,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: context.appColors.textSecondary,
               fontSize: 14,
             ),
           ),
@@ -314,10 +314,10 @@ class _ProfileSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.7),
+        color: context.appColors.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(AppSizes.radiusXL),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: context.appColors.glassBorder,
         ),
       ),
       padding: const EdgeInsets.all(AppSizes.spacingL),
@@ -326,8 +326,8 @@ class _ProfileSection extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: AppColors.textMain,
+            style: TextStyle(
+              color: context.appColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
@@ -353,20 +353,20 @@ class _ImpactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.7),
+        color: context.appColors.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(AppSizes.radiusXL),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: context.appColors.glassBorder,
         ),
       ),
       padding: const EdgeInsets.all(AppSizes.spacingL),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Impacto Social',
             style: TextStyle(
-              color: AppColors.textMain,
+              color: context.appColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
@@ -427,7 +427,7 @@ class _StatChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceElevated.withValues(alpha: 0.6),
+        color: context.appColors.surfaceElevated.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(AppSizes.radiusL),
       ),
       padding: const EdgeInsets.symmetric(
@@ -441,8 +441,8 @@ class _StatChip extends StatelessWidget {
           const SizedBox(height: AppSizes.spacingXS),
           Text(
             value,
-            style: const TextStyle(
-              color: AppColors.textMain,
+            style: TextStyle(
+              color: context.appColors.textMain,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
@@ -452,8 +452,8 @@ class _StatChip extends StatelessWidget {
             label,
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: context.appColors.textSecondary,
               fontSize: 12,
             ),
           ),

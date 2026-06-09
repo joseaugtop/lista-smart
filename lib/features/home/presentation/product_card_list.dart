@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -29,10 +29,10 @@ class ProductCardList extends ConsumerWidget {
       onTap: () => context.push(AppRoutes.productDetailPath(product.id)),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appColors.surface,
           borderRadius: BorderRadius.circular(AppSizes.radiusM),
           border: Border.all(
-            color: AppColors.surfaceElevated,
+            color: context.appColors.surfaceElevated,
             width: 1,
           ),
         ),
@@ -62,8 +62,8 @@ class ProductCardList extends ConsumerWidget {
                 children: [
                   Text(
                     product.name,
-                    style: const TextStyle(
-                      color: AppColors.textMain,
+                    style: TextStyle(
+                      color: context.appColors.textMain,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -73,8 +73,8 @@ class ProductCardList extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     product.brand,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
+                    style: TextStyle(
+                      color: context.appColors.textSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -108,7 +108,7 @@ class ProductCardList extends ConsumerWidget {
                   LucideIcons.star,
                   color: isFavorite
                       ? AppColors.primary
-                      : AppColors.textSecondary,
+                      : context.appColors.textSecondary,
                   size: 20,
                   semanticLabel: isFavorite
                       ? 'Remover dos favoritos'
@@ -127,11 +127,11 @@ class _PlaceholderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surfaceElevated,
-      child: const Center(
+      color: context.appColors.surfaceElevated,
+      child: Center(
         child: Icon(
           LucideIcons.packageOpen,
-          color: AppColors.textSecondary,
+          color: context.appColors.textSecondary,
           size: 28,
         ),
       ),

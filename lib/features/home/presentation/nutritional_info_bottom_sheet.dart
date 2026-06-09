@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -18,8 +18,8 @@ class NutritionalInfoBottomSheet extends StatelessWidget {
       expand: false,
       builder: (context, scrollController) {
         return Container(
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
+          decoration: BoxDecoration(
+            color: context.appColors.surface,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(AppSizes.radiusXL),
             ),
@@ -34,7 +34,7 @@ class NutritionalInfoBottomSheet extends StatelessWidget {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceElevated,
+                      color: context.appColors.surfaceElevated,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -49,14 +49,14 @@ class NutritionalInfoBottomSheet extends StatelessWidget {
                     Text(
                       'Informações Nutricionais',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppColors.textMain,
+                            color: context.appColors.textMain,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
                     const SizedBox(height: AppSizes.spacingXS),
                     Text(
                       'Porção: ${info.servingSize}',
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: context.appColors.textSecondary),
                     ),
                     const SizedBox(height: AppSizes.spacingM),
                     _NutrientRow(label: 'Calorias', value: '${info.calories.toStringAsFixed(0)} kcal'),
@@ -77,7 +77,7 @@ class NutritionalInfoBottomSheet extends StatelessWidget {
                   AppSizes.spacingL,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appColors.surface,
                   border: Border(
                     top: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
                   ),
@@ -120,11 +120,11 @@ class _NutrientRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.textSecondary)),
+          Text(label, style: TextStyle(color: context.appColors.textSecondary)),
           Text(
             value,
-            style: const TextStyle(
-              color: AppColors.textMain,
+            style: TextStyle(
+              color: context.appColors.textMain,
               fontWeight: FontWeight.w600,
             ),
           ),

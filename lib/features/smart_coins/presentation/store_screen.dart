@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -42,11 +42,11 @@ class StoreScreen extends ConsumerWidget {
     final theme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        title: const Text('Smart Coins',
-            style: TextStyle(color: AppColors.textMain)),
+        backgroundColor: context.appColors.background,
+        title: Text('Smart Coins',
+            style: TextStyle(color: context.appColors.textMain)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSizes.spacingM),
@@ -57,10 +57,10 @@ class StoreScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(AppSizes.spacingL),
               decoration: BoxDecoration(
-                color: AppColors.surface.withValues(alpha: 0.7),
+                color: context.appColors.surface.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(AppSizes.radiusXL),
                 border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                    Border.all(color: context.appColors.glassBorder),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +81,7 @@ class StoreScreen extends ConsumerWidget {
                       Text(
                         'Smart Coins',
                         style: theme.bodyMedium
-                            ?.copyWith(color: AppColors.textSecondary),
+                            ?.copyWith(color: context.appColors.textSecondary),
                       ),
                     ],
                   ),
@@ -117,7 +117,7 @@ class StoreScreen extends ConsumerWidget {
                         Text(
                           'Próx. nível: ${_nextLevelThreshold(level)} moedas',
                           style: theme.bodySmall
-                              ?.copyWith(color: AppColors.textSecondary),
+                              ?.copyWith(color: context.appColors.textSecondary),
                         ),
                     ],
                   ),
@@ -133,7 +133,7 @@ class StoreScreen extends ConsumerWidget {
                       child: LinearProgressIndicator(
                         value: value,
                         minHeight: 8,
-                        backgroundColor: AppColors.surfaceElevated,
+                        backgroundColor: context.appColors.surfaceElevated,
                         color: AppColors.primary,
                       ),
                     ),
@@ -147,7 +147,7 @@ class StoreScreen extends ConsumerWidget {
             Text(
               'Pacotes',
               style: theme.titleMedium?.copyWith(
-                  color: AppColors.textMain, fontWeight: FontWeight.bold),
+                  color: context.appColors.textMain, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: AppSizes.spacingS),
             GridView.count(
@@ -169,7 +169,7 @@ class StoreScreen extends ConsumerWidget {
             Text(
               'Histórico',
               style: theme.titleMedium?.copyWith(
-                  color: AppColors.textMain, fontWeight: FontWeight.bold),
+                  color: context.appColors.textMain, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: AppSizes.spacingS),
             if (recent.isEmpty)
@@ -179,7 +179,7 @@ class StoreScreen extends ConsumerWidget {
                   child: Text(
                     'Nenhuma transação ainda',
                     style: theme.bodyMedium
-                        ?.copyWith(color: AppColors.textSecondary),
+                        ?.copyWith(color: context.appColors.textSecondary),
                   ),
                 ),
               )
@@ -200,7 +200,7 @@ class StoreScreen extends ConsumerWidget {
                   return Container(
                     padding: const EdgeInsets.all(AppSizes.spacingM),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: context.appColors.surface,
                       borderRadius:
                           BorderRadius.circular(AppSizes.radiusM),
                     ),
@@ -218,13 +218,13 @@ class StoreScreen extends ConsumerWidget {
                               Text(
                                 tx.description,
                                 style: theme.bodyMedium
-                                    ?.copyWith(color: AppColors.textMain),
+                                    ?.copyWith(color: context.appColors.textMain),
                               ),
                               Text(
                                 DateFormat('dd/MM/yyyy')
                                     .format(tx.createdAt),
                                 style: theme.bodySmall?.copyWith(
-                                    color: AppColors.textSecondary),
+                                    color: context.appColors.textSecondary),
                               ),
                             ],
                           ),
@@ -258,9 +258,9 @@ class _PackageCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(AppSizes.spacingS),
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.7),
+        color: context.appColors.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(AppSizes.radiusL),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: context.appColors.glassBorder),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -296,7 +296,7 @@ class _PackageCard extends ConsumerWidget {
               },
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                foregroundColor: context.appColors.background,
                 padding: const EdgeInsets.symmetric(
                     vertical: AppSizes.spacingXS),
                 shape: RoundedRectangleBorder(
