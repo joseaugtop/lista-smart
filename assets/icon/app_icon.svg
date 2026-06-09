@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#18181B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#09090B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C4F43A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A3E615;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="220" ry="220" fill="url(#bgGrad)"/>
+
+  <!-- Subtle inner glow ring -->
+  <rect width="1024" height="1024" rx="220" ry="220" fill="none" stroke="#A3E615" stroke-width="4" opacity="0.12"/>
+
+  <!-- Cart body -->
+  <g filter="url(#glow)">
+    <!-- Cart handle/bar -->
+    <path d="M 210 270 L 270 270 L 340 600 L 750 600 L 820 360 L 320 360"
+          fill="none" stroke="url(#cartGrad)" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Cart basket bottom -->
+    <line x1="340" y1="600" x2="750" y2="600" stroke="url(#cartGrad)" stroke-width="52" stroke-linecap="round"/>
+
+    <!-- Cart front vertical line -->
+    <line x1="750" y1="600" x2="820" y2="360" stroke="url(#cartGrad)" stroke-width="52" stroke-linecap="round"/>
+
+    <!-- Wheel left -->
+    <circle cx="420" cy="690" r="52" fill="url(#cartGrad)"/>
+    <circle cx="420" cy="690" r="26" fill="#09090B"/>
+
+    <!-- Wheel right -->
+    <circle cx="680" cy="690" r="52" fill="url(#cartGrad)"/>
+    <circle cx="680" cy="690" r="26" fill="#09090B"/>
+  </g>
+
+  <!-- Checkmark badge (bottom-right) -->
+  <circle cx="756" cy="756" r="148" fill="#09090B"/>
+  <circle cx="756" cy="756" r="128" fill="#22C55E"/>
+  <!-- Checkmark tick -->
+  <polyline points="686,756 736,806 826,706"
+            fill="none" stroke="#09090B" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
