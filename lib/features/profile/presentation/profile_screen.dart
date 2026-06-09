@@ -7,6 +7,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/data/mock_data.dart';
 import '../../../core/providers/coin_notifier.dart';
+import '../../../core/providers/theme_notifier.dart';
 import '../../../core/providers/user_notifier.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -157,6 +158,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   const SizedBox(height: AppSizes.spacingM),
                   _ImpactSection(scannedCount: scannedCount),
+                  const SizedBox(height: AppSizes.spacingM),
+                  _AppearanceSection(),
                   const SizedBox(height: AppSizes.spacingL),
                   ElevatedButton(
                     onPressed: _save,
@@ -401,6 +404,67 @@ class _ImpactSection extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Appearance Section
+// ---------------------------------------------------------------------------
+
+class _AppearanceSection extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(themeModeProvider);
+    return Container(
+      decoration: BoxDecoration(
+        color: context.appColors.surface.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(AppSizes.radiusXL),
+        border: Border.all(color: context.appColors.glassBorder),
+      ),
+      padding: const EdgeInsets.all(AppSizes.spacingL),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Aparência',
+            style: TextStyle(
+              color: context.appColors.textMain,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: AppSizes.spacingM),
+          SegmentedButton<ThemeMode>(
+            style: SegmentedButton.styleFrom(
+              selectedBackgroundColor: AppColors.primary.withValues(alpha: 0.15),
+              selectedForegroundColor: AppColors.primary,
+              foregroundColor: context.appColors.textSecondary,
+              side: BorderSide(color: context.appColors.glassBorder),
+            ),
+            segments: const [
+              ButtonSegment(
+                value: ThemeMode.system,
+                icon: Icon(LucideIcons.monitor, size: 16),
+                label: Text('Sistema'),
+              ),
+              ButtonSegment(
+                value: ThemeMode.light,
+                icon: Icon(LucideIcons.sun, size: 16),
+                label: Text('Claro'),
+              ),
+              ButtonSegment(
+                value: ThemeMode.dark,
+                icon: Icon(LucideIcons.moon, size: 16),
+                label: Text('Escuro'),
+              ),
+            ],
+            selected: {mode},
+            onSelectionChanged: (set) =>
+                ref.read(themeModeProvider.notifier).setMode(set.first),
           ),
         ],
       ),
