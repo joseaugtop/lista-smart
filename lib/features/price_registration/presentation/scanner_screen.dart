@@ -1,3 +1,5 @@
+﻿import 'dart:math';
+
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -90,7 +92,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       child: Stack(
         children: [
           Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: context.appColors.background,
             body: PageView(
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
@@ -151,7 +153,7 @@ class _Step1Widget extends StatelessWidget {
             Text(
               'Escanear Nota Fiscal',
               style: theme.headlineMedium?.copyWith(
-                color: AppColors.textMain,
+                color: context.appColors.textMain,
                 fontWeight: FontWeight.w700,
               ),
               textAlign: TextAlign.center,
@@ -159,7 +161,7 @@ class _Step1Widget extends StatelessWidget {
             const SizedBox(height: AppSizes.spacingXS),
             Text(
               'Escolha como deseja registrar sua compra',
-              style: theme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+              style: theme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSizes.spacingXL),
@@ -205,10 +207,10 @@ class _MethodCard extends StatelessWidget {
         height: 100,
         padding: const EdgeInsets.symmetric(horizontal: AppSizes.spacingM),
         decoration: BoxDecoration(
-          color: AppColors.surface.withValues(alpha: 0.7),
+          color: context.appColors.surface.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(AppSizes.radiusXL),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: context.appColors.glassBorder,
           ),
         ),
         child: Row(
@@ -223,14 +225,14 @@ class _MethodCard extends StatelessWidget {
                 Text(
                   title,
                   style: theme.titleMedium?.copyWith(
-                    color: AppColors.textMain,
+                    color: context.appColors.textMain,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
                   subtitle,
                   style:
-                      theme.bodySmall?.copyWith(color: AppColors.textSecondary),
+                      theme.bodySmall?.copyWith(color: context.appColors.textSecondary),
                 ),
               ],
             ),
@@ -261,7 +263,7 @@ class _Step2Widget extends StatelessWidget {
           children: [
             Text(
               'Etapa 2 de 3',
-              style: theme.bodySmall?.copyWith(color: AppColors.textSecondary),
+              style: theme.bodySmall?.copyWith(color: context.appColors.textSecondary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSizes.spacingL),
@@ -271,7 +273,7 @@ class _Step2Widget extends StatelessWidget {
               onPressed: onConfirm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
+                foregroundColor: context.appColors.background,
                 minimumSize: const Size(double.infinity, 52),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.radiusM),
@@ -317,17 +319,17 @@ class _ReceiptCard extends StatelessWidget {
     final today = DateTime.now();
     final dateStr = DateFormat('dd/MM/yyyy').format(today);
     final divider = Divider(
-      color: Colors.white.withValues(alpha: 0.1),
+      color: context.appColors.glassBorder,
       height: AppSizes.spacingL,
     );
 
     return Container(
       padding: const EdgeInsets.all(AppSizes.spacingL),
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.7),
+        color: context.appColors.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(AppSizes.radiusXL),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: context.appColors.glassBorder,
         ),
       ),
       child: Column(
@@ -340,7 +342,7 @@ class _ReceiptCard extends StatelessWidget {
               Text(
                 'Bistek Supermercados',
                 style: theme.titleMedium?.copyWith(
-                  color: AppColors.textMain,
+                  color: context.appColors.textMain,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -349,7 +351,7 @@ class _ReceiptCard extends StatelessWidget {
           const SizedBox(height: AppSizes.spacingXS),
           Text(
             dateStr,
-            style: theme.bodySmall?.copyWith(color: AppColors.textSecondary),
+            style: theme.bodySmall?.copyWith(color: context.appColors.textSecondary),
           ),
           divider,
           ..._lineItems.map(
@@ -362,12 +364,12 @@ class _ReceiptCard extends StatelessWidget {
                   Text(
                     item.$1,
                     style:
-                        theme.bodyMedium?.copyWith(color: AppColors.textMain),
+                        theme.bodyMedium?.copyWith(color: context.appColors.textMain),
                   ),
                   Text(
                     _brl.format(item.$2),
                     style: theme.bodyMedium
-                        ?.copyWith(color: AppColors.textSecondary),
+                        ?.copyWith(color: context.appColors.textSecondary),
                   ),
                 ],
               ),
@@ -380,7 +382,7 @@ class _ReceiptCard extends StatelessWidget {
               Text(
                 'Total',
                 style: theme.titleMedium?.copyWith(
-                  color: AppColors.textMain,
+                  color: context.appColors.textMain,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -472,7 +474,7 @@ class _Step3WidgetState extends State<_Step3Widget> {
                 Text(
                   'Nota fiscal cadastrada com sucesso!',
                   style: theme.titleMedium?.copyWith(
-                    color: AppColors.textMain,
+                    color: context.appColors.textMain,
                     fontWeight: FontWeight.w700,
                   ),
                   textAlign: TextAlign.center,
@@ -481,7 +483,7 @@ class _Step3WidgetState extends State<_Step3Widget> {
                 Text(
                   'Obrigado por contribuir com dados de preços.',
                   style:
-                      theme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+                      theme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppSizes.spacingXL),
@@ -507,7 +509,7 @@ class _Step3WidgetState extends State<_Step3Widget> {
                 TextButton(
                   onPressed: widget.onHome,
                   style: TextButton.styleFrom(
-                    foregroundColor: AppColors.textSecondary,
+                    foregroundColor: context.appColors.textSecondary,
                   ),
                   child: const Text('Voltar para início'),
                 ),
@@ -519,9 +521,11 @@ class _Step3WidgetState extends State<_Step3Widget> {
           excludeSemantics: true,
           child: ConfettiWidget(
             confettiController: widget.controller,
-            blastDirectionality: BlastDirectionality.explosive,
-            numberOfParticles: 20,
-            gravity: 0.3,
+            blastDirectionality: BlastDirectionality.directional,
+            blastDirection: pi / 2,
+            numberOfParticles: 30,
+            gravity: 0.5,
+            emissionFrequency: 0.05,
             colors: const [
               AppColors.primary,
               Color(0xFFF97316),
