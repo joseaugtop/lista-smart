@@ -1,7 +1,11 @@
-﻿import 'dart:math';
+import 'dart:math';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +17,8 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/data/mock_data.dart';
 import '../../../core/providers/coin_notifier.dart';
 import '../../../routing/app_routes.dart';
+import 'barcode_scanner_page.dart';
+import 'nfce_webview_page.dart';
 
 final _brl = NumberFormat.currency(locale: 'pt_BR', symbol: r'R$', decimalDigits: 2);
 
@@ -27,6 +33,9 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   late final PageController _pageController;
   late final ConfettiController _confettiController;
   bool _loading = false;
+  String? _scannedCode;
+  List<Map<String, dynamic>>? _scannedProducts;
+  String? _scannedStoreName;
 
   @override
   void initState() {
@@ -44,15 +53,170 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     super.dispose();
   }
 
-  Future<void> _startScan() async {
-    setState(() => _loading = true);
-    await Future<void>.delayed(const Duration(seconds: 2));
+  Future<bool> _sendHtmlPayload(String html) async {
+    final client = HttpClient();
+    client.connectionTimeout = const Duration(seconds: 8);
+    try {
+      final request = await client.postUrl(Uri.parse('http://192.168.16.253:5000/api/parse-html'));
+      request.headers.contentType = ContentType.json;
+      request.write(jsonEncode({'html': html}));
+      
+      final response = await request.close();
+      final responseBody = await response.transform(utf8.decoder).join();
+      
+      if (response.statusCode == 200) {
+        final data = jsonDecode(responseBody);
+        debugPrint("Sucesso no parse-html: $data");
+        if (data != null && data['products'] != null) {
+          final List rawList = data['products'] as List;
+          setState(() {
+            _scannedProducts = rawList.map((e) => e as Map<String, dynamic>).toList();
+            _scannedStoreName = data['parsed_receipt']?['store'] as String?;
+          });
+          return true;
+        }
+      } else {
+        debugPrint("Erro no servidor: ${response.statusCode}");
+      }
+    } catch (e) {
+      debugPrint("Erro de rede ao conectar com o backend local: $e");
+    } finally {
+      client.close();
+    }
+    return false;
+  }
+
+  Future<void> _scanQrCode() async {
+    // 1. Abre o scanner de câmera para ler o QR Code
+    final String? qrResult = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const BarcodeScannerPage(),
+      ),
+    );
+
+    if (qrResult == null) return;
+
+    setState(() {
+      _scannedCode = qrResult;
+    });
+
+    // 2. Abre a WebView interna para burlar Cloudflare/Captcha
+    if (!mounted) return;
+    final String? htmlResult = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NfceWebviewPage(url: qrResult),
+      ),
+    );
+
+    if (htmlResult == null) return;
+
+    setState(() {
+      _loading = true;
+    });
+
+    // 3. Envia o HTML extraído para o backend fazer o parsing dos itens
+    final bool success = await _sendHtmlPayload(htmlResult);
+
     if (!mounted) return;
     setState(() => _loading = false);
-    _pageController.nextPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+
+    if (success) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Falha ao processar os dados da nota. Tente novamente.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+  }
+
+  Future<void> _takePhotoAndScan() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1024,
+      maxHeight: 1024,
     );
+
+    if (image == null) return;
+
+    setState(() => _loading = true);
+
+    final scannerController = MobileScannerController();
+    
+    try {
+      final BarcodeCapture? capture = await scannerController.analyzeImage(image.path);
+      
+      if (capture != null && capture.barcodes.isNotEmpty && capture.barcodes.first.rawValue != null) {
+        final String qrResult = capture.barcodes.first.rawValue!;
+        
+        setState(() {
+          _scannedCode = qrResult;
+          _loading = false;
+        });
+
+        // Abre a WebView interna para burlar Cloudflare/Captcha
+        if (!mounted) return;
+        final String? htmlResult = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NfceWebviewPage(url: qrResult),
+          ),
+        );
+
+        if (htmlResult == null) return;
+
+        setState(() => _loading = true);
+
+        // Envia o HTML extraído para o backend fazer o parsing dos itens
+        final bool success = await _sendHtmlPayload(htmlResult);
+
+        if (!mounted) return;
+        setState(() => _loading = false);
+
+        if (success) {
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Falha ao processar os dados da nota. Tente novamente.'),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+        }
+      } else {
+        if (!mounted) return;
+        setState(() => _loading = false);
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Nenhum QR Code legível foi encontrado na foto. Tente alinhar o cupom ou use a câmera de scan direto.'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao analisar a imagem: $e'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    } finally {
+      scannerController.dispose();
+    }
   }
 
   void _confirmReceipt() {
@@ -97,8 +261,16 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _Step1Widget(onNext: _startScan),
-                _Step2Widget(onConfirm: _confirmReceipt),
+                _Step1Widget(
+                  onScanQrCode: _scanQrCode,
+                  onTakePhoto: _takePhotoAndScan,
+                ),
+                _Step2Widget(
+                  onConfirm: _confirmReceipt,
+                  scannedCode: _scannedCode,
+                  products: _scannedProducts,
+                  storeName: _scannedStoreName,
+                ),
                 _Step3Widget(
                   controller: _confettiController,
                   onRepeat: _returnHome,
@@ -131,9 +303,13 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 // ---------------------------------------------------------------------------
 
 class _Step1Widget extends StatelessWidget {
-  const _Step1Widget({required this.onNext});
+  const _Step1Widget({
+    required this.onScanQrCode,
+    required this.onTakePhoto,
+  });
 
-  final VoidCallback onNext;
+  final VoidCallback onScanQrCode;
+  final VoidCallback onTakePhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -169,14 +345,14 @@ class _Step1Widget extends StatelessWidget {
               icon: LucideIcons.qrCode,
               title: 'Escanear QR Code',
               subtitle: 'Aponte para o código da nota',
-              onTap: onNext,
+              onTap: onScanQrCode,
             ),
             const SizedBox(height: AppSizes.spacingM),
             _MethodCard(
               icon: LucideIcons.camera,
               title: 'Foto do Cupom',
               subtitle: 'Tire uma foto do cupom fiscal',
-              onTap: onNext,
+              onTap: onTakePhoto,
             ),
           ],
         ),
@@ -248,9 +424,17 @@ class _MethodCard extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class _Step2Widget extends StatelessWidget {
-  const _Step2Widget({required this.onConfirm});
+  const _Step2Widget({
+    required this.onConfirm,
+    this.scannedCode,
+    this.products,
+    this.storeName,
+  });
 
   final VoidCallback onConfirm;
+  final String? scannedCode;
+  final List<Map<String, dynamic>>? products;
+  final String? storeName;
 
   @override
   Widget build(BuildContext context) {
@@ -267,13 +451,13 @@ class _Step2Widget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSizes.spacingL),
-            const _ReceiptCard(),
+            _ReceiptCard(products: products, storeName: storeName),
             const SizedBox(height: AppSizes.spacingL),
             ElevatedButton(
               onPressed: onConfirm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: context.appColors.background,
+                foregroundColor: const Color(0xFF09090B), // Alto contraste: texto escuro no botão de cor primária lima neon
                 minimumSize: const Size(double.infinity, 52),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.radiusM),
@@ -303,10 +487,13 @@ class _Step2Widget extends StatelessWidget {
 }
 
 class _ReceiptCard extends StatelessWidget {
-  const _ReceiptCard();
+  const _ReceiptCard({this.products, this.storeName});
+
+  final List<Map<String, dynamic>>? products;
+  final String? storeName;
 
   // 4 products from MockData: Leite Integral, Banana Prata, Pão de Forma, Feijão Carioca
-  static final _lineItems = [
+  static final _fallbackItems = [
     (MockData.products[0].name, MockData.products[0].averagePrice), // Leite Integral
     (MockData.products[3].name, MockData.products[3].averagePrice), // Banana Prata
     (MockData.products[9].name, MockData.products[9].averagePrice), // Pão de Forma
@@ -322,6 +509,24 @@ class _ReceiptCard extends StatelessWidget {
       color: context.appColors.glassBorder,
       height: AppSizes.spacingL,
     );
+
+    // Calcula total e itens com base nos dados reais ou fallback
+    final List<(String, double)> lineItems = [];
+    double totalValue = 0.0;
+
+    if (products != null && products!.isNotEmpty) {
+      for (final p in products!) {
+        final String name = p['name'] ?? 'Produto';
+        final double price = (p['price'] as num?)?.toDouble() ?? 0.0;
+        lineItems.add((name, price));
+        totalValue += price;
+      }
+    } else {
+      for (final item in _fallbackItems) {
+        lineItems.add(item);
+        totalValue += item.$2;
+      }
+    }
 
     return Container(
       padding: const EdgeInsets.all(AppSizes.spacingL),
@@ -339,11 +544,15 @@ class _ReceiptCard extends StatelessWidget {
             children: [
               const Icon(LucideIcons.store, size: 20, color: AppColors.primary),
               const SizedBox(width: AppSizes.spacingS),
-              Text(
-                'Bistek Supermercados',
-                style: theme.titleMedium?.copyWith(
-                  color: context.appColors.textMain,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: Text(
+                  storeName ?? 'Bistek Supermercados',
+                  style: theme.titleMedium?.copyWith(
+                    color: context.appColors.textMain,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -354,18 +563,23 @@ class _ReceiptCard extends StatelessWidget {
             style: theme.bodySmall?.copyWith(color: context.appColors.textSecondary),
           ),
           divider,
-          ..._lineItems.map(
+          ...lineItems.map(
             (item) => Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: AppSizes.spacingXS),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    item.$1,
-                    style:
-                        theme.bodyMedium?.copyWith(color: context.appColors.textMain),
+                  Expanded(
+                    child: Text(
+                      item.$1,
+                      style:
+                          theme.bodyMedium?.copyWith(color: context.appColors.textMain),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  const SizedBox(width: AppSizes.spacingS),
                   Text(
                     _brl.format(item.$2),
                     style: theme.bodyMedium
@@ -387,8 +601,7 @@ class _ReceiptCard extends StatelessWidget {
                 ),
               ),
               Text(
-                // Non-breaking space normalized: formatter may use
-                _brl.format(87.43).replaceAll(' ', ' '),
+                _brl.format(totalValue).replaceAll(' ', ' '),
                 style: theme.titleMedium?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
