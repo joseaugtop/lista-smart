@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -53,35 +52,19 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     super.dispose();
   }
 
-  Future<bool> _sendHtmlPayload(String html) async {
-    final client = HttpClient();
-    client.connectionTimeout = const Duration(seconds: 8);
+  bool _processScrapedJson(String jsonStr) {
     try {
-      final request = await client.postUrl(Uri.parse('http://192.168.16.253:5000/api/parse-html'));
-      request.headers.contentType = ContentType.json;
-      request.write(jsonEncode({'html': html}));
-      
-      final response = await request.close();
-      final responseBody = await response.transform(utf8.decoder).join();
-      
-      if (response.statusCode == 200) {
-        final data = jsonDecode(responseBody);
-        debugPrint("Sucesso no parse-html: $data");
-        if (data != null && data['products'] != null) {
-          final List rawList = data['products'] as List;
-          setState(() {
-            _scannedProducts = rawList.map((e) => e as Map<String, dynamic>).toList();
-            _scannedStoreName = data['parsed_receipt']?['store'] as String?;
-          });
-          return true;
-        }
-      } else {
-        debugPrint("Erro no servidor: ${response.statusCode}");
+      final data = jsonDecode(jsonStr);
+      if (data != null && data['products'] != null) {
+        final List rawList = data['products'] as List;
+        setState(() {
+          _scannedProducts = rawList.map((e) => e as Map<String, dynamic>).toList();
+          _scannedStoreName = data['store'] as String?;
+        });
+        return true;
       }
     } catch (e) {
-      debugPrint("Erro de rede ao conectar com o backend local: $e");
-    } finally {
-      client.close();
+      debugPrint("Erro ao decodificar JSON do scrape: $e");
     }
     return false;
   }
@@ -116,8 +99,8 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       _loading = true;
     });
 
-    // 3. Envia o HTML extraído para o backend fazer o parsing dos itens
-    final bool success = await _sendHtmlPayload(htmlResult);
+    // 3. Processa o JSON extraído localmente
+    final bool success = _processScrapedJson(htmlResult);
 
     if (!mounted) return;
     setState(() => _loading = false);
@@ -175,8 +158,8 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 
         setState(() => _loading = true);
 
-        // Envia o HTML extraído para o backend fazer o parsing dos itens
-        final bool success = await _sendHtmlPayload(htmlResult);
+        // Processa o JSON extraído localmente
+        final bool success = _processScrapedJson(htmlResult);
 
         if (!mounted) return;
         setState(() => _loading = false);

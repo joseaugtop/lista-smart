@@ -20,6 +20,193 @@ class _NfceWebviewPageState extends State<NfceWebviewPage> {
   bool _hasExtracted = false;
   Timer? _pollingTimer;
 
+  static const String _scrapeScript = r'''
+(function() {
+  var rows = document.querySelectorAll('tr');
+  var products = [];
+  
+  for (var i = 0; i < rows.length; i++) {
+    var row = rows[i];
+    var cells = row.querySelectorAll('td, th');
+    if (cells.length === 0) continue;
+    
+    var cellTexts = [];
+    for (var j = 0; j < cells.length; j++) {
+      cellTexts.push(cells[j].textContent.trim());
+    }
+    
+    if (cellTexts.length === 0) continue;
+    
+    var firstCellLower = cellTexts[0].toLowerCase();
+    
+    // Pula cabeçalhos comuns (apenas se não for uma linha de produto com padrão de código)
+    if (firstCellLower.indexOf('(código:') === -1) {
+      var skipHeader = false;
+      var headers = ['descrição', 'descriçao', 'produto', 'item'];
+      for (var k = 0; k < headers.length; k++) {
+        if (firstCellLower.indexOf(headers[k]) !== -1) {
+          skipHeader = true;
+          break;
+        }
+      }
+      if (skipHeader) continue;
+    }
+    
+    // Pula linhas de rodapé/totais
+    var skipFooter = false;
+    var footers = ['valor total', 'desconto', 'troco', 'pagamento', 'tributos', 'impostos'];
+    for (var k = 0; k < footers.length; k++) {
+      if (firstCellLower.indexOf(footers[k]) !== -1) {
+        skipFooter = true;
+        break;
+      }
+    }
+    if (skipFooter) continue;
+    
+    var name = "";
+    var qty = 1.0;
+    var unit = "UN";
+    var price = 0.0;
+    
+    // CASO 1: Formato simplificado / mobile de 2 colunas (ex: Santa Catarina tabResult)
+    if (cells.length === 2) {
+      var col1 = cells[0].textContent;
+      var col2 = cells[1].textContent;
+      
+      var col1Clean = col1.replace(/\s+/g, ' ').trim();
+      var col2Clean = col2.replace(/\s+/g, ' ').trim();
+      
+      var nameMatch = col1Clean.match(/^(.*?)\(Código:/i);
+      var qtyMatch = col1Clean.match(/Qtde\.:\s*([\d,.]+)/i);
+      var unitMatch = col1Clean.match(/UN:\s*([A-Za-z0-9]+?)(?=Vl\.?\s*Unit)/i);
+      var unitValMatch = col1Clean.match(/Vl\. Unit\.:\s*([\d,.]+)/i);
+      
+      var totalMatch = col2Clean.match(/Vl\. Total\s*([\d,.]+)/i);
+      
+      if (nameMatch) {
+        name = nameMatch[1].trim();
+        
+        if (qtyMatch) {
+          var qtyStr = qtyMatch[1].replace(/\./g, '').replace(',', '.');
+          var parsedQty = parseFloat(qtyStr);
+          if (!isNaN(parsedQty)) qty = parsedQty;
+        }
+        
+        if (unitMatch) {
+          unit = unitMatch[1].trim();
+        }
+        
+        if (totalMatch) {
+          var priceStr = totalMatch[1].replace(/\./g, '').replace(',', '.');
+          var parsedPrice = parseFloat(priceStr);
+          if (!isNaN(parsedPrice)) price = parsedPrice;
+        } else if (unitValMatch) {
+          var uvalStr = unitValMatch[1].replace(/\./g, '').replace(',', '.');
+          var parsedUval = parseFloat(uvalStr);
+          if (!isNaN(parsedUval)) price = parsedUval * qty;
+        }
+      }
+    }
+    // CASO 2: Formato clássico de 4 ou mais colunas (GridView)
+    else if (cells.length >= 5) {
+      var isItemNumber = /^\d+$/.test(cellTexts[0]);
+      if (isItemNumber && cellTexts[1].length > 2) {
+        name = cellTexts[1];
+        
+        try {
+          var qtyStr = cellTexts[2].replace(/\./g, '').replace(',', '.');
+          var qtyMatch = qtyStr.match(/\d+\.?\d*/);
+          if (qtyMatch) {
+            qty = parseFloat(qtyMatch[0]);
+          }
+        } catch(e) {
+          qty = 1.0;
+        }
+        
+        unit = cellTexts[3] && cellTexts[3].length > 0 ? cellTexts[3] : "UN";
+        
+        try {
+          var priceStr = cellTexts[cellTexts.length - 1].replace(/R\$/i, '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+          var priceMatch = priceStr.match(/\d+\.?\d*/);
+          if (priceMatch) {
+            price = parseFloat(priceMatch[0]);
+          }
+        } catch(e) {
+          price = 0.0;
+        }
+      } else {
+        // Fallback
+        for (var k = 0; k < cellTexts.length; k++) {
+          var t = cellTexts[k];
+          if (t.length > 5 && !name) {
+            var containsForbidden = false;
+            var keywords = ['cnpj', 'inscrição', 'rua', 'avenida', 'bairro', 'santa catarina'];
+            for (var m = 0; m < keywords.length; m++) {
+              if (t.toLowerCase().indexOf(keywords[m]) !== -1) {
+                containsForbidden = true;
+                break;
+              }
+            }
+            if (!containsForbidden) {
+              name = t;
+            }
+          }
+        }
+        
+        var nums = [];
+        for (var k = 0; k < cellTexts.length; k++) {
+          var clean = cellTexts[k].replace(/R\$/i, '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+          var valMatch = clean.match(/^\d+\.?\d*$/);
+          if (valMatch) {
+            var parsedVal = parseFloat(valMatch[0]);
+            if (!isNaN(parsedVal)) nums.push(parsedVal);
+          }
+        }
+        
+        if (nums.length > 0) {
+          qty = nums.length > 1 ? nums[0] : 1.0;
+          price = nums[nums.length - 1];
+        }
+      }
+    }
+    
+    if (name && price > 0) {
+      name = name.replace(/\s+/g, ' ').trim();
+      var containsForbiddenName = false;
+      var nameKeywords = ['tributos', 'impostos', 'consumidor', 'chave de acesso', 'protocolo', 'via consumidor'];
+      for (var k = 0; k < nameKeywords.length; k++) {
+        if (name.toLowerCase().indexOf(nameKeywords[k]) !== -1) {
+          containsForbiddenName = true;
+          break;
+        }
+      }
+      if (!containsForbiddenName) {
+        products.push({
+          name: name,
+          qty: qty,
+          unit: unit,
+          price: price
+        });
+      }
+    }
+  }
+  
+  var storeName = "Estabelecimento Não Identificado";
+  var storeElement = document.getElementById('txtRazaoSocial') || 
+                      document.querySelector('.txtTopo') || 
+                      document.querySelector('.header');
+  if (storeElement) {
+    storeName = storeElement.textContent.trim();
+  }
+  
+  return JSON.stringify({
+    status: "success",
+    store: storeName,
+    products: products
+  });
+})()
+''';
+
   @override
   void initState() {
     super.initState();
@@ -105,7 +292,29 @@ class _NfceWebviewPageState extends State<NfceWebviewPage> {
           _pollingTimer = null;
           
           if (mounted) {
-            Navigator.pop(context, html);
+            try {
+              final Object scrapeResult = await _controller.runJavaScriptReturningResult(_scrapeScript);
+              String jsonStr = scrapeResult.toString();
+              if (jsonStr.startsWith('"') && jsonStr.endsWith('"')) {
+                try {
+                  jsonStr = jsonDecode(jsonStr) as String;
+                } catch (e) {
+                  jsonStr = jsonStr.substring(1, jsonStr.length - 1)
+                      .replaceAll(r'\"', '"')
+                      .replaceAll(r'\n', '\n')
+                      .replaceAll(r'\r', '\r')
+                      .replaceAll(r'\t', '\t');
+                }
+              }
+              if (mounted) {
+                Navigator.pop(context, jsonStr);
+              }
+            } catch (e) {
+              debugPrint("[WEBVIEW] Erro ao executar scraping local: $e");
+              if (mounted) {
+                Navigator.pop(context);
+              }
+            }
           }
         } else {
           debugPrint("[WEBVIEW] Tabela 'tabResult' ainda não encontrada na tentativa $attempts. Aguardando...");
