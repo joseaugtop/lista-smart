@@ -45,6 +45,11 @@ class CartNotifier extends Notifier<List<CartItem>> {
     _persist();
   }
 
+  void setItems(List<CartItem> items) {
+    state = items;
+    _persist();
+  }
+
   void incrementQuantity(String productId) {
     final idx = state.indexWhere((item) => item.productId == productId);
     if (idx < 0) return;

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -10,6 +10,11 @@ import '../../../core/providers/search_query_notifier.dart';
 import '../../../core/providers/show_favorites_only_notifier.dart';
 import '../../../core/providers/user_notifier.dart';
 import '../../../core/providers/view_mode_notifier.dart';
+import '../../../core/providers/recent_searches_notifier.dart';
+import '../../../core/providers/shopping_lists_notifier.dart';
+import '../../../core/providers/products_provider.dart';
+import '../../../core/providers/prices_provider.dart';
+import '../../../features/shopping_list/domain/cart_item.dart';
 import '../../../routing/app_routes.dart';
 import 'product_card_grid.dart';
 import 'product_card_list.dart';
@@ -45,6 +50,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final showFavOnly = ref.watch(showFavoritesOnlyProvider);
     final user = ref.watch(userNotifierProvider);
     final initials = _initials(user?.name ?? 'JA');
+    final recentSearches = ref.watch(recentSearchesProvider);
 
     return Scaffold(
       backgroundColor: context.appColors.background,
@@ -122,6 +128,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: TextStyle(color: context.appColors.textMain),
                     onChanged: (v) =>
                         ref.read(searchQueryProvider.notifier).update(v),
+                    onSubmitted: (v) =>
+                        ref.read(recentSearchesProvider.notifier).addSearch(v),
                     decoration: InputDecoration(
                       hintText: 'Buscar produtos...',
                       hintStyle:
@@ -149,6 +157,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
+          if (searchQuery.isEmpty && recentSearches.isNotEmpty)
+            SliverToBoxAdapter(
+              child: _RecentSearchesBar(
+                recentSearches: recentSearches,
+                searchController: _searchController,
+                onCreateList: (q) => _createListFromSearch(context, ref, q),
+              ),
+            ),
           if (filteredProducts.isEmpty)
             SliverFillRemaining(
               child: Center(
@@ -226,6 +242,99 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
+
+  Future<void> _createListFromSearch(
+    BuildContext context,
+    WidgetRef ref,
+    String query,
+  ) async {
+    final products = ref.read(productsProvider);
+    final pricesMap = ref.read(pricesProvider);
+
+    final cleanQuery = query.toLowerCase().trim();
+    final matchingProducts = products.where((p) =>
+        p.name.toLowerCase().contains(cleanQuery) ||
+        p.brand.toLowerCase().contains(cleanQuery) ||
+        p.category.toLowerCase().contains(cleanQuery)).toList();
+
+    if (matchingProducts.isEmpty) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Nenhum produto encontrado para criar a lista.'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+      return;
+    }
+
+    final textController = TextEditingController(text: 'Lista: ${query[0].toUpperCase()}${query.substring(1)}');
+    final name = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: context.appColors.surface,
+        title: Text('Criar Lista da Busca', style: TextStyle(color: context.appColors.textMain)),
+        content: TextField(
+          controller: textController,
+          autofocus: true,
+          style: TextStyle(color: context.appColors.textMain),
+          decoration: InputDecoration(
+            hintText: 'Nome da lista',
+            hintStyle: TextStyle(color: context.appColors.textSecondary),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.primary),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, textController.text),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: context.appColors.background,
+            ),
+            child: const Text('Criar'),
+          ),
+        ],
+      ),
+    );
+
+    if (name != null && name.trim().isNotEmpty) {
+      final List<CartItem> items = matchingProducts.map((product) {
+        final productPrices = pricesMap[product.id] ?? {};
+        double? lowestPrice;
+        for (final price in productPrices.values) {
+          if (lowestPrice == null || price < lowestPrice) {
+            lowestPrice = price;
+          }
+        }
+        return CartItem(
+          productId: product.id,
+          productName: product.name,
+          brand: product.brand,
+          imageUrl: product.imageUrl,
+          quantity: 1,
+          unitPrice: lowestPrice ?? product.averagePrice,
+        );
+      }).toList();
+
+      ref.read(shoppingListsProvider.notifier).createList(name.trim(), items);
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lista "$name" criada com ${items.length} itens!'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    }
+  }
 }
 
 class _StickySearchBarDelegate extends SliverPersistentHeaderDelegate {
@@ -248,4 +357,76 @@ class _StickySearchBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_StickySearchBarDelegate old) => old.child != child;
+}
+
+class _RecentSearchesBar extends ConsumerWidget {
+  const _RecentSearchesBar({
+    required this.recentSearches,
+    required this.searchController,
+    required this.onCreateList,
+  });
+
+  final List<String> recentSearches;
+  final TextEditingController searchController;
+  final Function(String) onCreateList;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.spacingM),
+        itemCount: recentSearches.length,
+        separatorBuilder: (_, __) => const SizedBox(width: AppSizes.spacingS),
+        itemBuilder: (context, index) {
+          final query = recentSearches[index];
+          return Container(
+            decoration: BoxDecoration(
+              color: context.appColors.surfaceElevated,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: context.appColors.glassBorder),
+            ),
+            padding: const EdgeInsets.only(left: 12, right: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ref.read(searchQueryProvider.notifier).update(query);
+                    searchController.text = query;
+                  },
+                  child: Text(
+                    query,
+                    style: TextStyle(
+                      color: context.appColors.textMain,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                IconButton(
+                  icon: const Icon(LucideIcons.listPlus, size: 14, color: AppColors.primary),
+                  tooltip: 'Criar lista a partir da busca',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () => onCreateList(query),
+                ),
+                const SizedBox(width: 4),
+                IconButton(
+                  icon: Icon(LucideIcons.x, size: 12, color: context.appColors.textSecondary),
+                  tooltip: 'Remover do histórico',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () => ref.read(recentSearchesProvider.notifier).removeSearch(query),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

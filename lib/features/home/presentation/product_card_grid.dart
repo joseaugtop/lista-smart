@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +7,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/providers/favorites_notifier.dart';
+import '../../../core/providers/search_query_notifier.dart';
+import '../../../core/providers/recent_searches_notifier.dart';
 import '../../../features/profile/domain/product.dart';
 import '../../../routing/app_routes.dart';
 
@@ -26,7 +28,13 @@ class ProductCardGrid extends ConsumerWidget {
     ).format(product.averagePrice);
 
     return GestureDetector(
-      onTap: () => context.push(AppRoutes.productDetailPath(product.id)),
+      onTap: () {
+        final query = ref.read(searchQueryProvider);
+        if (query.isNotEmpty) {
+          ref.read(recentSearchesProvider.notifier).addSearch(query);
+        }
+        context.push(AppRoutes.productDetailPath(product.id));
+      },
       child: Container(
         decoration: BoxDecoration(
           color: context.appColors.surface,

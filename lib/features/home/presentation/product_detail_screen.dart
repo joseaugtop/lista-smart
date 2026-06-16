@@ -1,4 +1,4 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +12,7 @@ import '../../../core/providers/prices_provider.dart';
 import '../../../core/providers/products_provider.dart';
 import '../../../features/profile/domain/product.dart';
 import '../../../features/shopping_list/domain/cart_item.dart';
+import '../../../core/providers/shopping_lists_notifier.dart';
 import 'nutritional_info_bottom_sheet.dart';
 
 class ProductDetailScreen extends ConsumerWidget {
@@ -302,6 +303,22 @@ class ProductDetailScreen extends ConsumerWidget {
 
             const SizedBox(height: AppSizes.spacingS),
 
+            // Add to List button
+            OutlinedButton(
+              onPressed: () => _showAddToListBottomSheet(context, ref, product, lowestPrice),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.primary),
+                padding: const EdgeInsets.symmetric(vertical: AppSizes.spacingM),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.radiusL),
+                ),
+              ),
+              child: const Text('Adicionar à Lista...'),
+            ),
+
+            const SizedBox(height: AppSizes.spacingS),
+
             // Nutritional info button
             OutlinedButton(
               onPressed: product.nutritionalInfo == null
@@ -462,3 +479,184 @@ class _MetadataRow extends StatelessWidget {
     );
   }
 }
+
+void _showAddToListBottomSheet(
+  BuildContext context,
+  WidgetRef ref,
+  Product product,
+  double? lowestPrice,
+) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: context.appColors.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radiusL)),
+    ),
+    builder: (context) {
+      return _AddToListBottomSheetBody(
+        product: product,
+        lowestPrice: lowestPrice,
+      );
+    },
+  );
+}
+
+class _AddToListBottomSheetBody extends ConsumerWidget {
+  const _AddToListBottomSheetBody({
+    required this.product,
+    required this.lowestPrice,
+  });
+
+  final Product product;
+  final double? lowestPrice;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lists = ref.watch(shoppingListsProvider);
+    final theme = Theme.of(context).textTheme;
+
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(AppSizes.spacingM),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Adicionar à Lista',
+                  style: theme.titleMedium?.copyWith(
+                    color: context.appColors.textMain,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(LucideIcons.plus, color: AppColors.primary),
+                  tooltip: 'Nova Lista',
+                  onPressed: () async {
+                    final textController = TextEditingController();
+                    final name = await showDialog<String>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        backgroundColor: context.appColors.surface,
+                        title: Text('Criar Nova Lista', style: TextStyle(color: context.appColors.textMain)),
+                        content: TextField(
+                          controller: textController,
+                          autofocus: true,
+                          style: TextStyle(color: context.appColors.textMain),
+                          decoration: InputDecoration(
+                            hintText: 'Nome da lista (ex: Churrasco)',
+                            hintStyle: TextStyle(color: context.appColors.textSecondary),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppColors.primary),
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(ctx),
+                            child: const Text('Cancelar'),
+                          ),
+                          FilledButton(
+                            onPressed: () => Navigator.pop(ctx, textController.text),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: context.appColors.background,
+                            ),
+                            child: const Text('Criar e Adicionar'),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (name != null && name.trim().isNotEmpty) {
+                      final notifier = ref.read(shoppingListsProvider.notifier);
+                      final newList = notifier.createList(name.trim());
+                      if (newList != null) {
+                        notifier.addItemToList(
+                          newList.id,
+                          CartItem(
+                            productId: product.id,
+                            productName: product.name,
+                            brand: product.brand,
+                            imageUrl: product.imageUrl,
+                            quantity: 1,
+                            unitPrice: lowestPrice ?? product.averagePrice,
+                          ),
+                        );
+                        if (context.mounted) {
+                          Navigator.pop(context); // Close bottom sheet
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${product.name} adicionado à lista "${newList.name}"!'),
+                              backgroundColor: AppColors.success,
+                            ),
+                          );
+                        }
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+          if (lists.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.spacingXL),
+              child: Center(
+                child: Text(
+                  'Nenhuma lista criada ainda.',
+                  style: TextStyle(color: context.appColors.textSecondary),
+                ),
+              ),
+            )
+          else
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: lists.length,
+                itemBuilder: (context, index) {
+                  final list = lists[index];
+                  return ListTile(
+                    leading: const Icon(LucideIcons.list),
+                    title: Text(
+                      list.name,
+                      style: TextStyle(color: context.appColors.textMain),
+                    ),
+                    subtitle: Text(
+                      '${list.items.length} ${list.items.length == 1 ? 'item' : 'itens'}',
+                      style: TextStyle(color: context.appColors.textSecondary),
+                    ),
+                    onTap: () {
+                      ref.read(shoppingListsProvider.notifier).addItemToList(
+                            list.id,
+                            CartItem(
+                              productId: product.id,
+                              productName: product.name,
+                              brand: product.brand,
+                              imageUrl: product.imageUrl,
+                              quantity: 1,
+                              unitPrice: lowestPrice ?? product.averagePrice,
+                            ),
+                          );
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${product.name} adicionado à lista "${list.name}"!'),
+                          backgroundColor: AppColors.success,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
